@@ -1,0 +1,35 @@
+{
+  "name": "keebord",
+  "version": "0.0.1",
+  "description": "Show the most effective keyboard layout with your GitHub projects",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ice-blaze/keebord.git"
+  },
+  "author": "ice-blaze",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ice-blaze/keebord/issues"
+  },
+  "homepage": "https://github.com/ice-blaze/keebord#readme",
+  "dependencies": {
+    "css-loader": "^0.28.10",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.7",
+    "style-loader": "^0.20.3",
+    "uglifyjs-webpack-plugin": "^1.2.3",
+    "vue": "^2.5.14"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "serve": "^6.5.2",
+    "tern": "^0.21.0",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12"
+  }
+}

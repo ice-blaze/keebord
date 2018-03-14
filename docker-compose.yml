@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  bash:
+    image: node:9.8.0-alpine
+    working_dir: /code
+    volumes:
+      - .:/code
+    command: "sh"
+
+  web:
+    image: node:9.8.0-alpine
+    ports:
+      - "5000:5000"
+    working_dir: "/code"
+    volumes:
+      - .:/code
+    command: "./node_modules/.bin/serve -p 5000"

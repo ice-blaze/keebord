@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+		<meta>
+		<meta charset="UTF-8">
+		<title>Keebord</title>
+</meta>
+
+<body>
+		<div id="app">
+				<input
+						id="github-user"
+						v-model="gitHubUsername"
+						@change="searchGithubUserProjects"
+						placeholder="GitHub user"
+				>
+				<p>Message is: {{ gitHubUsername }}</p>
+				<p>GitHub user exist ? {{ doesGitHubUserExist }}</p>
+				<p>urls ? {{ filesUrl }}</p>
+
+		</div>
+
+		<script
+				src="./build/bundle.js">
+		</script>
+
+</body>
+</html>
