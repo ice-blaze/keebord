@@ -24,7 +24,7 @@ function cleanText(text) {
 		return noTabsText
 }
 
-function updateDictionaryFromText(dictionary, text) {
+export function updateDictionaryFromText(dictionary, text) {
 		const cleanedText = cleanText(text)
 		for (const letter of cleanedText) {
 				if (dictionary[letter]) {

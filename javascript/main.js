@@ -21,11 +21,18 @@ new Vue({
 						const urlsGenerator = GitHubGather.getUrlsFromUser(gitHubUsername)
 						const frequencyDict = TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 
+
 						frequencyDict.then(dict => {
 								const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
-								this.filesUrl = keyboardLayout
+								this.filesUrl = frequencyDict
 								VirtualKeybord.drawVirtualKeyboard(keyboardLayout)
 						})
 				},
 		},
 });
+
+// debug
+// const dict = {}
+// TextFrequency.updateDictionaryFromText(dict, TextFrequency.qwertyChars)
+// const qwertyLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
+// VirtualKeybord.drawVirtualKeyboard(qwertyLayout)
