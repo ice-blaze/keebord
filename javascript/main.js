@@ -1,6 +1,7 @@
 import * as GitHubGather from "./github_gather.js"
 import * as KeyboardLayoutCreator from "./keyboard_layout_creator.js"
 import * as TextFrequency from "./text_frequency.js"
+import * as VirtualKeybord from "./virtual_keyboard.js"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "../css/keyboard.css"
 import Vue from "../node_modules/vue/dist/vue.js"
@@ -21,9 +22,10 @@ new Vue({
 						const frequencyDict = TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 
 						frequencyDict.then(dict => {
-								this.filesUrl = dict
+								const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
+								this.filesUrl = keyboardLayout
+								VirtualKeybord.drawVirtualKeyboard(keyboardLayout)
 						})
-						KeyboardLayoutCreator.setKeyboardLayout(frequencyDict)
 				},
 		},
 });
