@@ -1,5 +1,12 @@
 import $ from "jquery";
 
+function addShiftActivation() {
+		$("#keyboard .left-shift, #keyboard .right-shift").click(() => {
+				$(".shifted").toggle()
+				$(".unshifted").toggle()
+		})
+}
+
 export function drawVirtualKeyboard(keyboardLayout) {
 		const appendLine = (line) => {
 				for(const tuple of line){
@@ -17,4 +24,6 @@ export function drawVirtualKeyboard(keyboardLayout) {
 		appendLine(keyboardLayout[3])
 		$("#keyboard").append(`<li class="right-shift lastitem">&#8679;</li>`)
 		$("#keyboard").append(`<li class="space lastitem">&nbsp;</li>`)
+
+		addShiftActivation()
 }
