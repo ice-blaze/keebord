@@ -1,31 +1,123 @@
-import $ from "jquery";
+import * as TextFrequency from "./text_frequency.js"
 
-function getKeyboardLayout(frequencyDictionary) {
-		console.log(frequencyDictionary)
+/*
+	+47 for having the shift index
+  Indexes:
+	(notshifted)
+  00 01 02 03 04 05 06 07 08 09 10 11 12
+      13 14 15 16 17 18 19 20 21 22 23 24 25
+       26 27 28 29 30 31 32 33 34 35 36
+        37 38 39 40 41 42 43 44 45 46
+  (shifted)
+  47 48 49 50 51 52 53 54 55 56 57 58 59
+      60 61 62 63 64 65 66 67 68 69 70 71 72
+       73 74 75 76 77 78 79 80 81 82 83
+        84 85 86 87 88 89 90 91 92 93
+
+	Weights(shift is always worst, try to split hands):
+  45 43 41 39 37 35 34 36 38 40 42 44 46
+      17 15 13 11 19 20 12 14 16 18 21 32 33
+       06 04 02 00 08 09 01 03 05 07 10
+        28 26 24 22 31 23 25 27 29 30
+
+  92 90 88 86 84 82 81 83 85 87 89 91 93
+      64 62 60 58 66 67 59 61 63 65 68 79 80
+       53 51 49 47 55 56 48 50 52 54 57
+        75 73 71 69 78 70 72 74 76 77
+
+  Weights(shift can be better):
+	... TODO ..
+*/
+const zip = (arr, ...arrs) => {
+		return arr.map((val, i) => arrs.reduce((a, arr) => [...a, arr[i]], [val]));
 }
 
-const qwerty = [
-		[["`", "~"], ["1", "!"], ["2", "@"], ["3", "#"], ["4", "$"], ["5", "%"], ["6", "^"], ["7", "&"], ["8", "*"], ["9", "("], ["0", ")"], ["-", "_"], ["=", "+"],],
-		[["q", "Q"], ["w", "W"], ["e", "E"], ["r", "R"], ["t", "T"], ["y", "Y"], ["u", "U"], ["i", "I"], ["o", "O"], ["p", "P"], ["[", "{"], ["]", "}"], ["\\", "|"],],
-		[["a", "A"], ["s", "S"], ["d", "D"], ["f", "F"], ["g", "G"], ["h", "H"], ["j", "J"], ["k", "K"], ["l", "L"], [";", ":"], ["'", "\""],],
-		[["z", "Z"], ["x", "X"], ["c", "C"], ["v", "V"], ["b", "B"], ["n", "N"], ["m", "M"], [",", "<"], [".", ">"], ["/", "?"],],
+const weights = [
+		45, 43, 41, 39, 37, 35, 34, 36, 38, 40, 42, 44, 46, 17, 15, 13, 11, 19, 20,
+		12, 14, 16, 18, 21, 32, 33, 6, 4, 2, 0, 8, 9, 1, 3, 5, 7, 10, 28, 26, 24,
+		22, 31, 23, 25, 27, 29, 30, 92, 90, 88, 86, 84, 82, 81, 83, 85, 87, 89, 91,
+		93, 64, 62, 60, 58, 66, 67, 59, 61, 63, 65, 68, 79, 80, 53, 51, 49, 47, 55,
+		56, 48, 50, 52, 54, 57, 75, 73, 71, 69, 78, 70, 72, 74, 76, 77,
 ]
 
-export function setKeyboardLayout(frequencyDictionary) {
-		const appendLine = (line) => {
-				for(const tuple of line){
-						$("#keyboard").append(`<li><span class="unshifted">${tuple[0]}</span><span class="shifted">${tuple[1]}</span></li>`)
+function convertDictoToPairsList(dict) {
+		const items = Object.keys(dict).map(function(key) {
+				return [
+						key,
+						dict[key]
+				];
+		})
+		return items
+}
+
+function sortBySecondElement(first, second) {
+		return second[1] - first[1];
+}
+
+function getHighestToLowestKeyFromFrequencyDictionary(frequencyDictionary) {
+		const pairs = convertDictoToPairsList(frequencyDictionary)
+
+		pairs.sort(sortBySecondElement);
+		const highestToLowestKeys = pairs.map(pair => pair[0])
+
+		return highestToLowestKeys
+}
+
+function copyDictionary(dict) {
+		return JSON.parse(JSON.stringify(dict))
+}
+
+function addMissingChars(frequencyDictionary) {
+		const noMissingCharsDictionary = copyDictionary(frequencyDictionary)
+
+		for (const char of TextFrequency.qwertyChars) {
+				if (!noMissingCharsDictionary[char]) {
+						noMissingCharsDictionary[char] = -1
 				}
 		}
-		appendLine(qwerty[0])
-		$("#keyboard").append(`<li class="delete lastitem">&#x232b;</li>`)
-		$("#keyboard").append(`<li class="tab">↹</li>`)
-		appendLine(qwerty[1])
-		$("#keyboard").append(`<li class="capslock">&#8682;</li>`)
-		appendLine(qwerty[2])
-		$("#keyboard").append(`<li class="return lastitem">&#9166;</li>`)
-		$("#keyboard").append(`<li class="left-shift">&#8679;</li>`)
-		appendLine(qwerty[3])
-		$("#keyboard").append(`<li class="right-shift lastitem">&#8679;</li>`)
-		$("#keyboard").append(`<li class="space lastitem">&nbsp;</li>`)
+
+		return noMissingCharsDictionary
+}
+
+function convertFrequencyDictionaryIntoString(dict) {
+		const keys = getHighestToLowestKeyFromFrequencyDictionary(dict)
+		const finalResult = []
+
+		keys.forEach((value, index) => {
+				finalResult[weights[index]] = value
+		})
+
+		return finalResult.join("")
+}
+
+function convertLayoutToPairsList(layoutString) {
+		const layoutArray = layoutString.split("")
+
+		// TODO test if layout is dividable by two
+
+		const half = layoutArray.length / 2
+
+		const unshifted = layoutArray.slice(0, half)
+		const shifted = layoutArray.slice(half)
+		const pairs = zip(unshifted, shifted)
+
+		return pairs
+}
+
+function convertPairListToVirtualKeyboardFormat(pairList) {
+		return [
+				pairList.slice(0, 13),
+				pairList.slice(13, 26),
+				pairList.slice(26, 37),
+				pairList.slice(37),
+		]
+}
+
+export function getKeyboardLayout(frequencyDictionary) {
+		const completeFreqDict = addMissingChars(frequencyDictionary)
+		const layoutString = convertFrequencyDictionaryIntoString(completeFreqDict)
+		const pairList = convertLayoutToPairsList(layoutString)
+		const virtualKeyboardFormat = convertPairListToVirtualKeyboardFormat(pairList)
+
+		return virtualKeyboardFormat
 }
