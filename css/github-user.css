@@ -1,18 +1,18 @@
 #github-user.invalid {
-		background: #ffcfcc;
-		border-color: #d9534f;
+	background: #ffcfcc;
+	border-color: #d9534f;
 }
 
 #github-user.valid {
-		background: #ceefce;
-		border-color: #5cb85c;
+	background: #ceefce;
+	border-color: #5cb85c;
 }
 
 .hide {
-		display: none;
+	display: none;
 }
 
 .no-user {
-		color: #d9534f;
-		font-weight: bold;
+	color: #d9534f;
+	font-weight: bold;
 }

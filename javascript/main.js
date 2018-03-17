@@ -9,45 +9,44 @@ import Vue from "../node_modules/vue/dist/vue.js"
 // import Vue from "vue"
 
 new Vue({
-		el: "#app",
-		data: {
-				gitHubUsername: "",
-				doesGitHubUserExist: "",
-				frequenciesDictionary: {},
-				userIsValid: false,
-				userIsInvalid: false,
+	el: "#app",
+	data: {
+		gitHubUsername: "",
+		doesGitHubUserExist: "",
+		frequenciesDictionary: {},
+		userIsValid: false,
+		userIsInvalid: false,
+	},
+	methods: {
+		userExist() {
+			GitHubGather.userExist(this.gitHubUsername).then(isValid => {
+				if (isValid) {
+					this.userIsValid = true
+					this.userIsInvalid = false
+					this.searchGithubUserProjects()
+				} else {
+					this.userIsValid = false
+					this.userIsInvalid = true
+				}
+			})
 		},
-		methods: {
-				userExist() {
-						GitHubGather.userExist(this.gitHubUsername).then( isValid => {
-								if (isValid) {
-										this.userIsValid = true
-										this.userIsInvalid = false
-										this.searchGithubUserProjects()
-								} else {
-										this.userIsValid = false
-										this.userIsInvalid = true
-								}
-						})
-				},
-				searchGithubUserProjects() {
-						VirtualKeybord.drawLoading()
-						this.frequenciesDictionary = "Loading..."
-						const gitHubUsername = this.gitHubUsername
-						const urlsGenerator = GitHubGather.getUrlsFromUser(gitHubUsername)
-						const frequencyDict = TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
+		searchGithubUserProjects() {
+			VirtualKeybord.drawLoading()
+			this.frequenciesDictionary = "Loading..."
+			const gitHubUsername = this.gitHubUsername
+			const urlsGenerator = GitHubGather.getUrlsFromUser(gitHubUsername)
+			const frequencyDict = TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 
-						frequencyDict.then(dict => {
-								const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
-								this.frequenciesDictionary = dict
-								VirtualKeybord.drawVirtualKeyboard(keyboardLayout)
-						})
-				},
+			frequencyDict.then(dict => {
+				const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
+				this.frequenciesDictionary = dict
+				VirtualKeybord.drawVirtualKeyboard(keyboardLayout)
+			})
 		},
+	},
 });
 
 // debug
-// const dict = {}
-// TextFrequency.updateDictionaryFromText(dict, TextFrequency.qwertyChars)
+// const dict = TextFrequency.getFrequencyDictionaryFromText(TextFrequency.US_CHARS)
 // const qwertyLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
 // VirtualKeybord.drawVirtualKeyboard(qwertyLayout)

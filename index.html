@@ -1,73 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-		<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<title>Keebord</title>
+	<title>Keebord</title>
 </head>
 
 <body>
-		<nav class="navbar navbar-light bg-light">
-				<span class="navbar-brand mb-0 h1">Keebord</span>
-				<ul class="navbar-nav">
-						<li class="nav-item active">
-								<a class="nav-link" href="https://ljdchost.com/zA3F72f.gif">Feedback</span></a>
-						</li>
-				</ul>
-		</nav>
-		<div class="container" id="app">
-				<div class="row text-center">
-						<div class="col">
-								<br>
-								<h1 class="display-4">Keebord</h1>
-								<hr>
-								<span class="lead">Generate your ultimate keyboard layout !</span>
-								<br>
-								<br>
-								<br>
-						</div>
-				</div>
-				<div class="row align-items-center">
-						<div class="col offset-lg-3 col-lg-6 offset-md-2 col-md-8 col-smx-12">
-								<div class="form-group">
-										<div class="input-group mb-3">
-												<div class="input-group-prepend">
-														<span class="input-group-text" id="basic-addon1">
-																<img src="./build/mark-github.svg">
-														</span>
-												</div>
-												<input id="github-user"
-															 v-model="gitHubUsername"
-															 @change="userExist"
-															 placeholder="GitHub user"
-															 v-bind:class="{ valid: userIsValid, invalid: userIsInvalid }"
-															 class="form-control"
-												>
-										</div>
-										<div class="no-user" v-bind:class="{hide: !userIsInvalid}">
-												User doesn't exist
-										</div>
-										<small class="form-text text-muted">Find a user on GitHub. If you don't know try "ice-blaze".</small>
-										<br>
-								</div>
-						</div>
-				</div>
-				<!-- <div class="row"> -->
-				<!-- <div class="col"> -->
-				<!-- <p class="lead">freq ? {{ frequenciesDictionary }}</p> -->
-				<!-- </div> -->
-				<!-- </div> -->
+	<nav class="navbar navbar-light bg-light">
+			<span class="navbar-brand mb-0 h1">Keebord</span>
+			<ul class="navbar-nav">
+					<li class="nav-item active">
+							<a class="nav-link" href="https://ljdchost.com/zA3F72f.gif">Feedback</span></a>
+					</li>
+			</ul>
+	</nav>
+	<div class="container" id="app">
+		<div class="row text-center">
+			<div class="col">
+				<br>
+				<h1 class="display-4">Keebord</h1>
+				<hr>
+				<span class="lead">Generate your ultimate keyboard layout !</span>
+				<br>
+				<br>
+				<br>
+			</div>
 		</div>
-
-		<div class="keyboard_container">
-				<ul id="keyboard">
-				</ul>
+		<div class="row align-items-center">
+			<div class="col offset-lg-3 col-lg-6 offset-md-2 col-md-8 col-smx-12">
+				<div class="form-group">
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1">
+								<img src="./build/mark-github.svg">
+							</span>
+						</div>
+						<input id="github-user"
+							v-model="gitHubUsername"
+							@change="userExist"
+							placeholder="GitHub user"
+							v-bind:class="{ valid: userIsValid, invalid: userIsInvalid }"
+							class="form-control"
+						>
+					</div>
+					<div class="no-user" v-bind:class="{hide: !userIsInvalid}">
+							User doesn't exist
+					</div>
+					<small class="form-text text-muted">Find a user on GitHub. If you don't know try "ice-blaze".</small>
+					<br>
+				</div>
+			</div>
 		</div>
+		<!-- <div class="row"> -->
+		<!-- <div class="col"> -->
+		<!-- <p class="lead">freq ? {{ frequenciesDictionary }}</p> -->
+		<!-- </div> -->
+		<!-- </div> -->
+	</div>
 
-		<script
-				src="./build/bundle.js">
-		</script>
+	<div class="keyboard_container">
+		<ul id="keyboard">
+		</ul>
+	</div>
+
+	<script
+		src="./build/bundle.js">
+	</script>
 
 </body>
 </html>

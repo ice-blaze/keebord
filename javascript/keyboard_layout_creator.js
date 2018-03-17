@@ -25,99 +25,98 @@ import * as TextFrequency from "./text_frequency.js"
        53 51 49 47 55 56 48 50 52 54 57
         75 73 71 69 78 70 72 74 76 77
 
-  Weights(shift can be better):
-	... TODO ..
+  TODO Weights(shift can be better):
 */
 const zip = (arr, ...arrs) => {
-		return arr.map((val, i) => arrs.reduce((a, arr) => [...a, arr[i]], [val]));
+	return arr.map((val, i) => arrs.reduce((a, arr) => [...a, arr[i]], [val]));
 }
 
 const weights = [
-		45, 43, 41, 39, 37, 35, 34, 36, 38, 40, 42, 44, 46, 17, 15, 13, 11, 19, 20,
-		12, 14, 16, 18, 21, 32, 33, 6, 4, 2, 0, 8, 9, 1, 3, 5, 7, 10, 28, 26, 24,
-		22, 31, 23, 25, 27, 29, 30, 92, 90, 88, 86, 84, 82, 81, 83, 85, 87, 89, 91,
-		93, 64, 62, 60, 58, 66, 67, 59, 61, 63, 65, 68, 79, 80, 53, 51, 49, 47, 55,
-		56, 48, 50, 52, 54, 57, 75, 73, 71, 69, 78, 70, 72, 74, 76, 77,
+	45, 43, 41, 39, 37, 35, 34, 36, 38, 40, 42, 44, 46, 17, 15, 13, 11, 19, 20,
+	12, 14, 16, 18, 21, 32, 33, 6, 4, 2, 0, 8, 9, 1, 3, 5, 7, 10, 28, 26, 24,
+	22, 31, 23, 25, 27, 29, 30, 92, 90, 88, 86, 84, 82, 81, 83, 85, 87, 89, 91,
+	93, 64, 62, 60, 58, 66, 67, 59, 61, 63, 65, 68, 79, 80, 53, 51, 49, 47, 55,
+	56, 48, 50, 52, 54, 57, 75, 73, 71, 69, 78, 70, 72, 74, 76, 77,
 ]
 
 function convertDictoToPairsList(dict) {
-		const items = Object.keys(dict).map(function(key) {
-				return [
-						key,
-						dict[key]
-				];
-		})
-		return items
+	const items = Object.keys(dict).map(function(key) {
+		return [
+			key,
+			dict[key]
+		];
+	})
+	return items
 }
 
 function sortBySecondElement(first, second) {
-		return second[1] - first[1];
+	return second[1] - first[1];
 }
 
 function getHighestToLowestKeyFromFrequencyDictionary(frequencyDictionary) {
-		const pairs = convertDictoToPairsList(frequencyDictionary)
+	const pairs = convertDictoToPairsList(frequencyDictionary)
 
-		pairs.sort(sortBySecondElement);
-		const highestToLowestKeys = pairs.map(pair => pair[0])
+	pairs.sort(sortBySecondElement);
+	const highestToLowestKeys = pairs.map(pair => pair[0])
 
-		return highestToLowestKeys
+	return highestToLowestKeys
 }
 
 function copyDictionary(dict) {
-		return JSON.parse(JSON.stringify(dict))
+	return JSON.parse(JSON.stringify(dict))
 }
 
 function addMissingChars(frequencyDictionary) {
-		const noMissingCharsDictionary = copyDictionary(frequencyDictionary)
+	const noMissingCharsDictionary = copyDictionary(frequencyDictionary)
 
-		for (const char of TextFrequency.qwertyChars) {
-				if (!noMissingCharsDictionary[char]) {
-						noMissingCharsDictionary[char] = -1
-				}
+	for (const char of TextFrequency.US_CHARS) {
+		if (!noMissingCharsDictionary[char]) {
+			noMissingCharsDictionary[char] = -1
 		}
+	}
 
-		return noMissingCharsDictionary
+	return noMissingCharsDictionary
 }
 
 function convertFrequencyDictionaryIntoString(dict) {
-		const keys = getHighestToLowestKeyFromFrequencyDictionary(dict)
-		const finalResult = []
+	const keys = getHighestToLowestKeyFromFrequencyDictionary(dict)
+	const finalResult = []
 
-		keys.forEach((value, index) => {
-				finalResult[weights[index]] = value
-		})
+	keys.forEach((value, index) => {
+		finalResult[weights[index]] = value
+	})
 
-		return finalResult.join("")
+	return finalResult.join("")
 }
 
 function convertLayoutToPairsList(layoutString) {
-		const layoutArray = layoutString.split("")
+	const layoutArray = layoutString.split("")
 
-		// TODO test if layout is dividable by two
+	// TODO test if layout is dividable by two
 
-		const half = layoutArray.length / 2
+	const half = layoutArray.length / 2
 
-		const unshifted = layoutArray.slice(0, half)
-		const shifted = layoutArray.slice(half)
-		const pairs = zip(unshifted, shifted)
+	const unshifted = layoutArray.slice(0, half)
+	const shifted = layoutArray.slice(half)
+	const pairs = zip(unshifted, shifted)
 
-		return pairs
+	return pairs
 }
 
 function convertPairListToVirtualKeyboardFormat(pairList) {
-		return [
-				pairList.slice(0, 13),
-				pairList.slice(13, 26),
-				pairList.slice(26, 37),
-				pairList.slice(37),
-		]
+	return [
+		pairList.slice(0, 13),
+		pairList.slice(13, 26),
+		pairList.slice(26, 37),
+		pairList.slice(37),
+	]
 }
 
 export function getKeyboardLayout(frequencyDictionary) {
-		const completeFreqDict = addMissingChars(frequencyDictionary)
-		const layoutString = convertFrequencyDictionaryIntoString(completeFreqDict)
-		const pairList = convertLayoutToPairsList(layoutString)
-		const virtualKeyboardFormat = convertPairListToVirtualKeyboardFormat(pairList)
+	const completeFreqDict = addMissingChars(frequencyDictionary)
+	const layoutString = convertFrequencyDictionaryIntoString(completeFreqDict)
+	const pairList = convertLayoutToPairsList(layoutString)
+	const virtualKeyboardFormat = convertPairListToVirtualKeyboardFormat(pairList)
 
-		return virtualKeyboardFormat
+	return virtualKeyboardFormat
 }
