@@ -5,12 +5,20 @@ import * as VirtualKeybord from "./virtual_keyboard.js"
 
 import Vue from "../node_modules/vue/dist/vue.js"
 
+import Chartkick from 'chartkick'
+import VueChartkick from 'vue-chartkick'
+import Chart from 'chart.js'
+
+Vue.use(VueChartkick, { Chartkick })
+
+
 new Vue({
 	el: "#app",
 	data: {
 		gitHubUsername: "",
 		doesGitHubUserExist: "",
-		frequenciesDictionary: {},
+		frequenciesDictionary: [],
+		finishedLoaded: false,
 		userIsValid: false,
 		userIsInvalid: false,
 	},
@@ -29,14 +37,15 @@ new Vue({
 		},
 		searchGithubUserProjects() {
 			VirtualKeybord.drawLoading()
-			this.frequenciesDictionary = "Loading..."
+			// this.frequenciesDictionary = "Loading..."
 			const gitHubUsername = this.gitHubUsername
 			const urlsGenerator = GitHubGather.getUrlsFromUser(gitHubUsername)
 			const frequencyDict = TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 
 			frequencyDict.then(dict => {
 				const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
-				this.frequenciesDictionary = dict
+				this.frequenciesDictionary = KeyboardLayoutCreator.getSortedFrequencyPairs(dict)
+				this.finishedLoaded = true
 				VirtualKeybord.drawVirtualKeyboard(keyboardLayout)
 			})
 		},

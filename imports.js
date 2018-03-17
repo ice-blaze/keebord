@@ -5,4 +5,5 @@ import "./scss/github-user.scss"
 
 /* JS */
 
+import "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
 import "./javascript/main-vue.js"

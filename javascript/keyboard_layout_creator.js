@@ -63,10 +63,15 @@ const sortBySecondElement = (first, second) => {
 	return second[VAL] - first[VAL];
 }
 
-const getHighestToLowestKeyFromFrequencyDictionary = (frequencyDictionary) => {
+export const getSortedFrequencyPairs = (frequencyDictionary) => {
 	const pairs = convertDictoToPairsList(frequencyDictionary)
-
 	pairs.sort(sortBySecondElement);
+
+	return pairs
+}
+
+const getSortedFrequencyDictionary = (frequencyDictionary) => {
+	const pairs = getSortedFrequencyPairs(frequencyDictionary)
 	const highestToLowestKeys = pairs.map(pair => pair[KEY])
 
 	return highestToLowestKeys
@@ -89,7 +94,7 @@ const addMissingChars = (frequencyDictionary) => {
 }
 
 const convertFrequencyDictionaryIntoString = (dict) => {
-	const keys = getHighestToLowestKeyFromFrequencyDictionary(dict)
+	const keys = getSortedFrequencyDictionary(dict)
 	const finalResult = []
 
 	keys.forEach((value, index) => {

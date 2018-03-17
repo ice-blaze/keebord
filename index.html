@@ -40,16 +40,14 @@
 						<input id="github-user"
 							v-model="gitHubUsername"
 							@change="userExist"
-							placeholder="GitHub username, E.g. ice-blaze"
+							placeholder="GitHub username, e.g. ice-blaze"
 							v-bind:class="{ valid: userIsValid, invalid: userIsInvalid }"
 							class="form-control"
 						>
 					</div>
 					<div class="no-user" v-bind:class="{hide: !userIsInvalid}">
-							User doesn't exist
+						User doesn't exist
 					</div>
-					<small class="form-text text-muted">Find a user on GitHub. If you don't know try "ice-blaze".</small>
-					<br>
 				</div>
 			</div>
 		</div>
@@ -58,12 +56,39 @@
 		<!-- <p class="lead">freq ? {{ frequenciesDictionary }}</p> -->
 		<!-- </div> -->
 		<!-- </div> -->
+		<div class="row">
+			<div class="keyboard_container">
+				<ul id="keyboard">
+				</ul>
+			</div>
+		</div>
+		<div class="row" v-show="finishedLoaded">
+			<div class="col col-sm-12 text-center">
+				<br>
+				<button class="btn btn-primary"
+						id="btnFrequencyChartCollapser"
+						type="button"
+						data-toggle="collapse"
+						data-target="#collapseFrequencyChart"
+						aria-expanded="false"
+						aria-controls="collapseFrequencyChart"
+				>
+					Frequency Details
+				</button>
+			</div>
+			<div class="col offset-lg-3 col-lg-6 offset-md-2 col-md-8 col-smx-12">
+				<br>
+				<div class="collapse" id="collapseFrequencyChart">
+					<bar-chart
+						:data="frequenciesDictionary"
+						height="500px"
+						class=" card card-body"
+					></bar-chart>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div class="keyboard_container">
-		<ul id="keyboard">
-		</ul>
-	</div>
 
 	<script
 		src="./build/bundle.js">
@@ -78,6 +103,5 @@
 
 		gtag('config', 'UA-74609109-2');
 	</script>
-
 </body>
 </html>
