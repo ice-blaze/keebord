@@ -1,10 +1,10 @@
-export function flatten(list) {
+export const flatten = (list) => {
 	return list.reduce(
 		(a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
 	)
 }
 
-export function mergeDicts(dictA, dictB) {
+export const mergeDicts = (dictA, dictB) => {
 	const mergeDict = Object.assign({}, dictA)
 
 	Object.keys(dictB).forEach(key => {
@@ -18,6 +18,6 @@ export function mergeDicts(dictA, dictB) {
 	return mergeDict
 }
 
-export function reduceDicts(dicts) {
+export const reduceDicts = (dicts) => {
 	return dicts.reduce(dic => mergeDicts({}, dic))
 }
