@@ -8,6 +8,7 @@ function addShiftActivation() {
 }
 
 export function drawVirtualKeyboard(keyboardLayout) {
+		$("#keyboard").empty()
 		const appendLine = (line) => {
 				for(const tuple of line){
 						$("#keyboard").append(`<li><span class="unshifted">${tuple[0]}</span><span class="shifted">${tuple[1]}</span></li>`)
@@ -26,4 +27,8 @@ export function drawVirtualKeyboard(keyboardLayout) {
 		$("#keyboard").append(`<li class="space lastitem">&nbsp;</li>`)
 
 		addShiftActivation()
+}
+
+export function drawLoading() {
+		$("#keyboard").append(`Loading...`)
 }

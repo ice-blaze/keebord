@@ -4,27 +4,42 @@ import * as TextFrequency from "./text_frequency.js"
 import * as VirtualKeybord from "./virtual_keyboard.js"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "../css/keyboard.css"
+import "../css/github-user.css"
 import Vue from "../node_modules/vue/dist/vue.js"
 // import Vue from "vue"
 
 new Vue({
 		el: "#app",
 		data: {
-				gitHubUsername: "ice-blaz",
+				gitHubUsername: "",
 				doesGitHubUserExist: "",
-				filesUrl: "",
+				frequenciesDictionary: {},
+				userIsValid: false,
+				userIsInvalid: false,
 		},
 		methods: {
+				userExist() {
+						GitHubGather.userExist(this.gitHubUsername).then( isValid => {
+								if (isValid) {
+										this.userIsValid = true
+										this.userIsInvalid = false
+										this.searchGithubUserProjects()
+								} else {
+										this.userIsValid = false
+										this.userIsInvalid = true
+								}
+						})
+				},
 				searchGithubUserProjects() {
-						this.filesUrl = "Loading..."
+						VirtualKeybord.drawLoading()
+						this.frequenciesDictionary = "Loading..."
 						const gitHubUsername = this.gitHubUsername
 						const urlsGenerator = GitHubGather.getUrlsFromUser(gitHubUsername)
 						const frequencyDict = TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 
-
 						frequencyDict.then(dict => {
 								const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
-								this.filesUrl = frequencyDict
+								this.frequenciesDictionary = dict
 								VirtualKeybord.drawVirtualKeyboard(keyboardLayout)
 						})
 				},
