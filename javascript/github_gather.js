@@ -7,6 +7,8 @@ const auth = {
 		}
 }
 
+const API_URL = "https://api.github.com/"
+
 function fetchJson(url) {
 		return fetch(url, auth)
 				.then(function(response) {
@@ -15,7 +17,7 @@ function fetchJson(url) {
 }
 
 function getReposFromUser(username) {
-		return fetchJson("https://api.github.com/users/" + username + "/repos")
+		return fetchJson(API_URL + "users/" + username + "/repos")
 				.then(function(repos) {
 						const names = repos.map((repo) => repo.name)
 						return names
@@ -27,7 +29,7 @@ function getReposFromUser(username) {
 }
 
 function getUrlsFromRepo(reponame, username) {
-		return fetchJson("https://api.github.com/repos/" + username + "/" + reponame + "/contents")
+		return fetchJson(API_URL + "repos/" + username + "/" + reponame + "/contents")
 				.then(function(filesAndFolders) {
 						// TODO filter with file extension
 						const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
@@ -59,6 +61,17 @@ function getUrlsFromRepos(repos, username) {
 		}).then(urls => {
 				return urls.map(url => getFileFromUrl(url))
 		})
+}
+
+const NOT_FOUND = 404
+
+export async function userExist(username) {
+		const fetchResponse = await fetch(API_URL + "users/" + username)
+		if (fetchResponse.status === NOT_FOUND) {
+				return false
+		}
+
+		return true
 }
 
 export function getUrlsFromUser(username) {

@@ -38,32 +38,26 @@
 														</span>
 												</div>
 												<input id="github-user"
-																v-model="gitHubUsername"
-																@change="searchGithubUserProjects"
-																placeholder="GitHub user"
-																class="form-control"
+															 v-model="gitHubUsername"
+															 @change="userExist"
+															 placeholder="GitHub user"
+															 v-bind:class="{ valid: userIsValid, invalid: userIsInvalid }"
+															 class="form-control"
 												>
+										</div>
+										<div class="no-user" v-bind:class="{hide: !userIsInvalid}">
+												User doesn't exist
 										</div>
 										<small class="form-text text-muted">Find a user on GitHub. If you don't know try "ice-blaze".</small>
 										<br>
 								</div>
 						</div>
 				</div>
-				<div class="row">
-						<div class="col">
-								<p class="lead">GitHub user is: {{ gitHubUsername }}</p>
-						</div>
-				</div>
-				<div class="row">
-						<div class="col">
-								<p class="lead ">GitHub user exist ? {{ doesGitHubUserExist }}</p>
-						</div>
-				</div>
-				<div class="row">
-						<div class="col">
-								<p class="lead">urls ? {{ filesUrl }}</p>
-						</div>
-				</div>
+				<!-- <div class="row"> -->
+				<!-- <div class="col"> -->
+				<!-- <p class="lead">freq ? {{ frequenciesDictionary }}</p> -->
+				<!-- </div> -->
+				<!-- </div> -->
 		</div>
 
 		<div class="keyboard_container">
