@@ -1,103 +1,87 @@
 #keyboard {
-		margin: 0;
-		padding: 0;
-		list-style: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
 #keyboard li {
-		float: left;
-		margin: 0 5px 5px 0;
-		width: 2vw; /*40px*/
-		min-width: 20px;
-		height: 2em;
-		line-height: 2em;
-		text-align: center;
-		background: #fff;
-		/* border: 1px solid #f9f9f9; */
-		border: 1px solid #595959;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
+	float: left;
+	margin: 0 5px 5px 0;
+	width: 2vw; /*40px*/
+	min-width: 20px;
+	height: 2em;
+	line-height: 2em;
+	text-align: center;
+	background: #fff;
+	/* border: 1px solid #f9f9f9; */
+	border: 1px solid #595959;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 .capslock, .tab, .left-shift {
-		clear: left;
+	clear: left;
 }
 
 #keyboard .tab, #keyboard .delete {
-		/* width: 70px; */
-		min-width: 30px;
-		width: 3vw;
+	/* width: 70px; */
+	min-width: 30px;
+	width: 3vw;
 }
 
 #keyboard .capslock {
-		/* width: 80px; */
-		min-width: 40px;
-		width: 4vw;
+	/* width: 80px; */
+	min-width: 40px;
+	width: 4vw;
 }
 
 #keyboard .return {
-		/* width: 77px; */
-		min-width: 35px;
-		width: 3vw;
+	/* width: 77px; */
+	min-width: 35px;
+	width: 3vw;
 }
 
-#keyboard .left-shift {
-		/* width: 95px; */
-		min-width: 50px;
-		width: 5vw;
-		background: linear-gradient(to right, #ff8008, #ffc837);
-		border: 0px;
+#keyboard .left-shift, #keyboard .right-shift {
+	/* width: 95px; */
+	min-width: 50px;
+	width: 5vw;
+	background: linear-gradient(to right, #ff8008, #ffc837);
+	border: 0px;
 }
 
-#keyboard .right-shift {
-		/* width: 109px; */
-		min-width: 50px;
-		width: 5vw;
-		background: linear-gradient(to right, #ff8008, #ffc837);
-		border: 0px;
-}
-
-#keyboard .left-shift:hover{
-		-webkit-filter: brightness(80%);
-		-webkit-transition: all 0.4s ease;
-		-moz-transition: all 0.4s ease;
-		-o-transition: all 0.4s ease;
-		-ms-transition: all 0.4s ease;
-		transition: all 0.4s ease;
-}
-
-#keyboard .right-shift:hover{
-		-webkit-filter: brightness(80%);
-		-webkit-transition: all 0.4s ease;
-		-moz-transition: all 0.4s ease;
-		-o-transition: all 0.4s ease;
-		-ms-transition: all 0.4s ease;
-		transition: all 0.4s ease;
+#keyboard .left-shift:hover, #keyboard .right-shift:hover{
+	-webkit-filter: brightness(80%);
+	-webkit-transition: all 0.4s ease;
+	-moz-transition: all 0.4s ease;
+	-o-transition: all 0.4s ease;
+	-ms-transition: all 0.4s ease;
+	transition: all 0.4s ease;
+	cursor: pointer;
 }
 
 .lastitem {
-		margin-right: 0;
+	margin-right: 0;
 }
 
 .uppercase {
-		text-transform: uppercase;
+	text-transform: uppercase;
 }
 
 #keyboard .space {
-		clear: left;
-		/* width: 681px; */
-		min-width: 360px;
-		width: 34vw;
+	clear: left;
+	/* width: 681px; */
+	min-width: 360px;
+	width: 34vw;
 }
 
 .shifted {
-		display: none;
+	display: none;
 }
 
 .keyboard_container {
-		min-width: 360px;
-		width: 36vw;
-		height: 100px;
-		text-align: center;
-		margin: auto;
+	min-width: 360px;
+	width: 36vw;
+	height: 100px;
+	text-align: center;
+	margin: auto;
 }
