@@ -2,12 +2,12 @@ import * as ListUtils from "./list_utils.js"
 
 export const US_CHARS = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
 
-function removeSameLettersFollowing(text) {
+const removeSameLettersFollowing = (text) => {
 	// TODO removeSameLettersFollowing
 	return text
 }
 
-function keepUSChars(text) {
+const keepUSChars = (text) => {
 	const chars = text.split("")
 	const cleanedChars = chars.filter(char => US_CHARS.includes(char))
 	const joinedCleanedChars = cleanedChars.join("")
@@ -15,7 +15,7 @@ function keepUSChars(text) {
 }
 
 // ...
-function cleanText(text) {
+const cleanText = (text) => {
 	const noFollowingLetters = removeSameLettersFollowing(text)
 	const noTabsText = keepUSChars(noFollowingLetters)
 	// TODO cleanText
@@ -24,7 +24,7 @@ function cleanText(text) {
 	return noTabsText
 }
 
-export function getFrequencyDictionaryFromText(text) {
+export const getFrequencyDictionaryFromText = (text) => {
 	const cleanedText = cleanText(text)
 
 	const dictionary = {}
@@ -39,7 +39,7 @@ export function getFrequencyDictionaryFromText(text) {
 	return dictionary
 }
 
-async function getFrequenciesDictonariesFromFiles(filesGeneratorPromise) {
+const getFrequenciesDictonariesFromFiles = async (filesGeneratorPromise) => {
 	const filesGenerator = await filesGeneratorPromise
 	return filesGenerator.map(async fileGenerator => {
 		const text = (await fileGenerator.next()).value
@@ -49,7 +49,7 @@ async function getFrequenciesDictonariesFromFiles(filesGeneratorPromise) {
 	})
 }
 
-export async function getFrequenciesDictonaryFromFiles(filesGenerator) {
+export const getFrequenciesDictonaryFromFiles = async (filesGenerator) => {
 	const arrayOfPromiseOfDictionaries = await getFrequenciesDictonariesFromFiles(filesGenerator)
 	const dicts = await Promise.all(arrayOfPromiseOfDictionaries)
 

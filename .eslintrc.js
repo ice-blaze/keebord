@@ -6,7 +6,7 @@ module.exports = {
     "extends": "eslint:recommended",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2017
+        "ecmaVersion": 2018,
     },
     "rules": {
         "accessor-pairs": "error",
@@ -30,7 +30,7 @@ module.exports = {
         "camelcase": "error",
         "capitalized-comments": "off",
         "class-methods-use-this": "error",
-        "comma-dangle": "off",
+        "comma-dangle": ["error", "always-multiline"],
         "comma-spacing": [
             "error",
             {
@@ -229,7 +229,7 @@ module.exports = {
         ],
         "radix": "error",
         "require-await": "error",
-        "require-jsdoc": "error",
+        // "require-jsdoc": "error",
         "rest-spread-spacing": "error",
         "semi": "off",
         "semi-spacing": "error",
