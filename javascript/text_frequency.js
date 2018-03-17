@@ -1,15 +1,15 @@
 import * as ListUtils from "./list_utils.js"
 
-export const qwertyChars = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
+export const US_CHARS = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
 
 function removeSameLettersFollowing(text) {
-		// TODO
+		// TODO removeSameLettersFollowing
 		return text
 }
 
 function keepUSChars(text) {
 		const chars = text.split("")
-		const cleanedChars = chars.filter(char => qwertyChars.includes(char))
+		const cleanedChars = chars.filter(char => US_CHARS.includes(char))
 		const joinedCleanedChars = cleanedChars.join("")
 		return joinedCleanedChars
 }
@@ -18,14 +18,16 @@ function keepUSChars(text) {
 function cleanText(text) {
 		const noFollowingLetters = removeSameLettersFollowing(text)
 		const noTabsText = keepUSChars(noFollowingLetters)
-		// TODO ...
+		// TODO cleanText
 		// removeClosingBrackets // WARNING don't forget to add them on the final layout at least once
 		//
 		return noTabsText
 }
 
-export function updateDictionaryFromText(dictionary, text) {
+export function getFrequencyDictionaryFromText(text) {
 		const cleanedText = cleanText(text)
+
+		const dictionary = {}
 		for (const letter of cleanedText) {
 				if (dictionary[letter]) {
 						dictionary[letter] += 1
@@ -33,30 +35,24 @@ export function updateDictionaryFromText(dictionary, text) {
 						dictionary[letter] = 1
 				}
 		}
+
+		return dictionary
 }
 
-function getFrequenciesDictonariesFromFiles(filesGenerator) {
-		return filesGenerator.then(filesGenerator => {
-				return filesGenerator.map(fileGenerator => {
-						const promiseFile = fileGenerator.next().value
-						return promiseFile.then(text => {
-								const dictionary = {}
-								updateDictionaryFromText(dictionary, text)
-								return dictionary
-						})
-				})
+async function getFrequenciesDictonariesFromFiles(filesGeneratorPromise) {
+		const filesGenerator = await filesGeneratorPromise
+		return filesGenerator.map(async fileGenerator => {
+				const text = (await fileGenerator.next()).value
+				const dictionary = getFrequencyDictionaryFromText(text)
+
+				return dictionary
 		})
 }
 
-export function getFrequenciesDictonaryFromFiles(filesGenerator) {
-		const promise = getFrequenciesDictonariesFromFiles(filesGenerator)
+export async function getFrequenciesDictonaryFromFiles(filesGenerator) {
+		const arrayOfPromiseOfDictionaries = await getFrequenciesDictonariesFromFiles(filesGenerator)
+		const dicts = await Promise.all(arrayOfPromiseOfDictionaries)
 
-		const then = promise.then(dicts => {
-				return Promise.all(dicts).then(dicts => {
-						const mergedDict = ListUtils.reduceDicts(dicts)
-						return mergedDict
-				})
-		})
-
-		return then
+		const mergedDict = ListUtils.reduceDicts(dicts)
+		return mergedDict
 }

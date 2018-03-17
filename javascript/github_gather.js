@@ -9,58 +9,45 @@ const auth = {
 
 const API_URL = "https://api.github.com/"
 
-function fetchJson(url) {
-		return fetch(url, auth)
-				.then(function(response) {
-						return response.json()
-				})
+async function fetchJson(url) {
+		const fetchResult = await fetch(url, auth)
+		return fetchResult.json()
 }
 
-function getReposFromUser(username) {
-		return fetchJson(API_URL + "users/" + username + "/repos")
-				.then(function(repos) {
-						const names = repos.map((repo) => repo.name)
-						return names
-				})
-				.catch(function(error) {
-						// TODO handle 404
-						console.log(error)
-				})
+async function getReposFromUser(username) {
+		const repos = await fetchJson(API_URL + "users/" + username + "/repos")
+		const names = repos.map(repo => repo.name)
+
+		return names
 }
 
-function getUrlsFromRepo(reponame, username) {
-		return fetchJson(API_URL + "repos/" + username + "/" + reponame + "/contents")
-				.then(function(filesAndFolders) {
-						// TODO filter with file extension
-						const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
-						// const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file")
-						// TODO handle multiple level
-						// const directories = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "dir")
-						const urls = files.map(file => file.download_url)
-						return urls.slice(1) // TODO DEBUG
-						// return urls
-				})
+async function getUrlsFromRepo(reponame, username) {
+		const filesAndFolders = await fetchJson(API_URL + "repos/" + username + "/" + reponame + "/contents")
+
+		// TODO filter with file extension
+		const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
+		// const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file")
+		// TODO handle multiple level
+		// const directories = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "dir")
+		const urls = files.map(file => file.download_url)
+		return urls.slice(1) // TODO DEBUG
+		// return urls
 }
 
-function *getFileFromUrl (url) {
-		yield fetch(url)
-				.then(function(file) {
-						return file.text().then(text => {
-								return text
-						})
-				})
+async function *getFileFromUrl (url) {
+		const fetchResult = await fetch(url)
+		const text = await fetchResult.text()
+		yield text
 }
 
-function getUrlsFromRepos(repos, username) {
-		// WTF 3 return ?!?!
-		return repos.then((repos) => {
-				const filesUrl = repos.map(reponame => getUrlsFromRepo(reponame, username))
-				return Promise.all(filesUrl).then((toto) => {
-						return ListUtils.flatten(toto)
-				})
-		}).then(urls => {
-				return urls.map(url => getFileFromUrl(url))
-		})
+async function getUrlsFromRepos(reposPromise, username) {
+		const repos = await reposPromise
+
+		const filesUrlPromisArray = repos.map(reponame => getUrlsFromRepo(reponame, username))
+		const filesUrl = await Promise.all(filesUrlPromisArray)
+		const urls = ListUtils.flatten(filesUrl)
+		const generatorUrls = urls.map(url => getFileFromUrl(url))
+		return generatorUrls
 }
 
 const NOT_FOUND = 404

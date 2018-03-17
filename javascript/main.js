@@ -47,7 +47,6 @@ new Vue({
 });
 
 // debug
-// const dict = {}
-// TextFrequency.updateDictionaryFromText(dict, TextFrequency.qwertyChars)
+// const dict = TextFrequency.getFrequencyDictionaryFromText(TextFrequency.US_CHARS)
 // const qwertyLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
 // VirtualKeybord.drawVirtualKeyboard(qwertyLayout)

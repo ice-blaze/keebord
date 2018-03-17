@@ -25,8 +25,7 @@ import * as TextFrequency from "./text_frequency.js"
        53 51 49 47 55 56 48 50 52 54 57
         75 73 71 69 78 70 72 74 76 77
 
-  Weights(shift can be better):
-	... TODO ..
+  TODO Weights(shift can be better):
 */
 const zip = (arr, ...arrs) => {
 		return arr.map((val, i) => arrs.reduce((a, arr) => [...a, arr[i]], [val]));
@@ -70,7 +69,7 @@ function copyDictionary(dict) {
 function addMissingChars(frequencyDictionary) {
 		const noMissingCharsDictionary = copyDictionary(frequencyDictionary)
 
-		for (const char of TextFrequency.qwertyChars) {
+		for (const char of TextFrequency.US_CHARS) {
 				if (!noMissingCharsDictionary[char]) {
 						noMissingCharsDictionary[char] = -1
 				}
