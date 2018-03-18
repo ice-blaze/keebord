@@ -24,6 +24,7 @@ import * as TextFrequency from "./text_frequency.js"
 //      53 51 49 47 55 56 48 50 52 54 57
 //       75 73 71 69 78 70 72 74 76 77
 
+
 // TODO Weights(shift can be better):
 
 // TODO move to utils
@@ -37,12 +38,12 @@ const zip = (arr, ...arrs) => {
 }
 
 /* eslint-disable no-magic-numbers, array-element-newline */
-const weights = [
-	45, 43, 41, 39, 37, 35, 34, 36, 38, 40, 42, 44, 46, 17, 15, 13, 11, 19, 20,
-	12, 14, 16, 18, 21, 32, 33, 6, 4, 2, 0, 8, 9, 1, 3, 5, 7, 10, 28, 26, 24,
-	22, 31, 23, 25, 27, 29, 30, 92, 90, 88, 86, 84, 82, 81, 83, 85, 87, 89, 91,
-	93, 64, 62, 60, 58, 66, 67, 59, 61, 63, 65, 68, 79, 80, 53, 51, 49, 47, 55,
-	56, 48, 50, 52, 54, 57, 75, 73, 71, 69, 78, 70, 72, 74, 76, 77,
+const weightsConversion = [
+	29, 32, 28, 33, 27, 34, 26, 35, 30, 31, 36, 16, 19, 15, 20, 14, 21, 13, 22,
+	17, 18, 23, 40, 42, 39, 43, 38, 44, 37, 45, 46, 41, 24, 25, 6, 5, 7, 4, 8,
+	3, 9, 2, 10, 1, 11, 0, 12, 76, 79, 75, 80, 74, 81, 73, 82, 77, 78, 83, 63,
+	66, 62, 67, 61, 68, 60, 69, 64, 65, 70, 87, 89, 86, 90, 85, 91, 84, 92, 93,
+	88, 71, 72, 53, 52, 54, 51, 55, 50, 56, 49, 57, 48, 58, 47, 59
 ]
 /* eslint-enable no-magic-numbers, array-element-newline */
 
@@ -98,7 +99,7 @@ const convertFrequencyDictionaryIntoString = (dict) => {
 	const finalResult = []
 
 	keys.forEach((value, index) => {
-		finalResult[weights[index]] = value
+		finalResult[weightsConversion[index]] = value
 	})
 
 	return finalResult.join("")
