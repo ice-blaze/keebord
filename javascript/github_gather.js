@@ -9,7 +9,14 @@ const API_URL = "https://api.github.com/"
 
 const fetchJson = async (url) => {
 	const fetchResult = await fetch(url, auth)
-	return fetchResult.json()
+	const json = await fetchResult.json()
+
+	if (fetchResult.status === 403) {
+		console.log("HUMHUM no more credits...")
+		return []
+	}
+
+	return json
 }
 
 const getReposFromUser = async (username) => {
@@ -19,19 +26,65 @@ const getReposFromUser = async (username) => {
 	return names
 }
 
+const ignoreBadFolders = (folder) => {
+	const badFolders = [
+		"dst",
+		"bin",
+		"build",
+		"vendor",
+		"node_modules",
+	]
+
+	return badFolders.every(badFolder => folder === badFolder)
+}
+
+const getUrlsFromDirectories = async (directories, deep) => {
+	const INCREMENT = 1
+	const currentDeep = deep + INCREMENT
+	// TODO deep level limit ??
+	const maxDeep = 2
+	if (currentDeep >= maxDeep) {
+		return []
+	}
+
+	const allDirectories = directories.map(async (directory) => {
+		const filesAndFolders = await fetchJson(directory.url)
+
+		// TODO filter with file extension
+		const unCleanedDirectories = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "dir")
+		const directories = unCleanedDirectories.filter(ignoreBadFolders)
+		const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
+		const subFiles = await getUrlsFromDirectories(directories, currentDeep)
+
+		return [
+			...files,
+			...subFiles,
+		]
+	})
+
+	const finishedFiles = await Promise.all(allDirectories)
+	const flattenFiles = ListUtils.flatten(finishedFiles)
+	return flattenFiles
+}
+
 const getUrlsFromRepo = async (reponame, username) => {
 	const filesAndFolders = await fetchJson(API_URL + "repos/" + username + "/" + reponame + "/contents")
 
-	// TODO filter with file extension
-	const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
-	// const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file")
-	// TODO handle multiple level
-	// const directories = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "dir")
+	const initialDeep = 0
+	const directories = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "dir")
+	const firstLeverFiles = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
+	const flattenFiles = ListUtils.flatten(firstLeverFiles)
+
+	const subDirectoriesFiles = await getUrlsFromDirectories(directories, initialDeep)
+	const files = [
+		...flattenFiles,
+		...subDirectoriesFiles,
+	]
 	const urls = files.map(file => file.download_url)
-	// TODO DEBUG
-	const SLICE = 1
-	return urls.slice(SLICE)
-	// return urls
+
+	// TODO no more requests allowed signal
+
+	return urls
 }
 
 const getFileFromUrl = async function *(url) {
