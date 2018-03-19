@@ -2,105 +2,50 @@ import * as ListUtils from "./list_utils.js"
 
 const auth = {
 	method: "get",
-	headers: {"Authorization": "Basic " + btoa("ice-blaze:")},
+	headers: {"Authorization": "Basic " + btoa("ice-blaze")},
 }
 
 const API_URL = "https://api.github.com/"
+
+const ERROR_NO_RIGHTS = 403
 
 const fetchJson = async (url) => {
 	const fetchResult = await fetch(url, auth)
 	const json = await fetchResult.json()
 
-	if (fetchResult.status === 403) {
-		console.log("HUMHUM no more credits...")
+	if (fetchResult.status === ERROR_NO_RIGHTS) {
+		console.log("HUMHUM no more credits... API")
 		return []
 	}
 
 	return json
 }
 
-const getReposFromUser = async (username) => {
-	const repos = await fetchJson(API_URL + "users/" + username + "/repos")
-	const names = repos.map(repo => repo.name)
 
-	return names
-}
+const fetchGraphQlJson = async (qlQuery) => {
+	const API_URL = "https://api.github.com/graphql"
+	const HALF = "73ffa3c066b213a458fa1"
+	const fetchResult = await fetch(
+		API_URL, {
+			method: "POST",
+			headers: {"Authorization": "bearer 7b9f3c06c02f2b0acb7" + HALF},
+			body: JSON.stringify({query: qlQuery}),
+		},
+	)
+	const json = await fetchResult.json()
 
-const ignoreBadFolders = (folder) => {
-	const badFolders = [
-		"dst",
-		"bin",
-		"build",
-		"vendor",
-		"node_modules",
-	]
-
-	return badFolders.every(badFolder => folder === badFolder)
-}
-
-const getUrlsFromDirectories = async (directories, deep) => {
-	const INCREMENT = 1
-	const currentDeep = deep + INCREMENT
-	// TODO deep level limit ??
-	const maxDeep = 2
-	if (currentDeep >= maxDeep) {
+	if (fetchResult.status === ERROR_NO_RIGHTS) {
+		console.log("HUMHUM no more credits... API_QL")
 		return []
 	}
 
-	const allDirectories = directories.map(async (directory) => {
-		const filesAndFolders = await fetchJson(directory.url)
-
-		// TODO filter with file extension
-		const unCleanedDirectories = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "dir")
-		const directories = unCleanedDirectories.filter(ignoreBadFolders)
-		const files = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
-		const subFiles = await getUrlsFromDirectories(directories, currentDeep)
-
-		return [
-			...files,
-			...subFiles,
-		]
-	})
-
-	const finishedFiles = await Promise.all(allDirectories)
-	const flattenFiles = ListUtils.flatten(finishedFiles)
-	return flattenFiles
-}
-
-const getUrlsFromRepo = async (reponame, username) => {
-	const filesAndFolders = await fetchJson(API_URL + "repos/" + username + "/" + reponame + "/contents")
-
-	const initialDeep = 0
-	const directories = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "dir")
-	const firstLeverFiles = filesAndFolders.filter(fileOrFolder => fileOrFolder.type === "file" && fileOrFolder.name.endsWith(".js"))
-	const flattenFiles = ListUtils.flatten(firstLeverFiles)
-
-	const subDirectoriesFiles = await getUrlsFromDirectories(directories, initialDeep)
-	const files = [
-		...flattenFiles,
-		...subDirectoriesFiles,
-	]
-	const urls = files.map(file => file.download_url)
-
-	// TODO no more requests allowed signal
-
-	return urls
+	return json
 }
 
 const getFileFromUrl = async function *(url) {
 	const fetchResult = await fetch(url)
 	const text = await fetchResult.text()
 	yield text
-}
-
-const getUrlsFromRepos = async(reposPromise, username) => {
-	const repos = await reposPromise
-
-	const filesUrlPromisArray = repos.map(reponame => getUrlsFromRepo(reponame, username))
-	const filesUrl = await Promise.all(filesUrlPromisArray)
-	const urls = ListUtils.flatten(filesUrl)
-	const generatorUrls = urls.map(url => getFileFromUrl(url))
-	return generatorUrls
 }
 
 const NOT_FOUND = 404
@@ -114,8 +59,111 @@ export const userExist = async (username) => {
 	return true
 }
 
-export const getUrlsFromUser = (username) => {
-	const repos = getReposFromUser(username)
-	const urlsGenerator = getUrlsFromRepos(repos, username)
-	return urlsGenerator
+const repoGqlQuery = (username, afterId) => {
+    let afterString = ""
+	if (afterId) {
+		afterString = ", after: \"\""
+	}
+
+	return `
+		query {
+			user(login: "${username}"${afterString}){
+				repositories(first: 100){
+				edges{
+					cursor
+					node{
+					name
+					defaultBranchRef{
+						name
+					}
+					}
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+				}
+				}
+			}
+		}
+	`
+}
+
+const getReposDefaultBranch = async (username) => {
+	// TODO don't handle more than 100 repositories
+	const reposQueryResult = await fetchGraphQlJson(repoGqlQuery(username))
+	const reposRaw = reposQueryResult.data.user.repositories.edges.map(edge => edge.node)
+	const reposWithDefaultBranch = reposRaw.filter(repo => repo.defaultBranchRef)
+
+	const repoAndDefaultBranchDict = new Map(reposWithDefaultBranch.map(
+		repo => [repo.name, repo.defaultBranchRef.name])
+	)
+
+	return repoAndDefaultBranchDict
+}
+
+const getLanguages = () => {
+	const languages = ["php", "cpp", "js", "rb", "java", "py", "cs"] // eslint-disable-line array-element-newline
+	const head = "+language:"
+	const languagesUrl = head + languages.join(head)
+	return languagesUrl
+}
+
+const createFileUrlFromItem = (item, reposDefaultBranch) => {
+	const rawUrl = "https://raw.githubusercontent.com/"
+
+	const repo = item.repository
+	const defaultBranch = reposDefaultBranch[repo.name]
+	return `${rawUrl}${repo.full_name}/${defaultBranch}/${item.path}`
+}
+
+const filterItems = (items, reposDefaultBranch) => {
+	const itemsWithoutVendors = items.items.filter(item => !item.path.includes("vendor/"))
+	const itemsWithDevBranches = itemsWithoutVendors.filter(item => reposDefaultBranch[item.repository.name])
+
+	return itemsWithDevBranches
+}
+
+const getItemsFromPage = async (pageNumber, url, reposDefaultBranch) => {
+
+	const fetched = await fetchJson(url + "&page=" + pageNumber)
+
+	// if no element items, return empty
+	if (!fetched.items) {
+		console.log("no elements items found")
+		return []
+	}
+
+	const filteredItems = filterItems(fetched, reposDefaultBranch)
+
+	const items = filteredItems.map(item => createFileUrlFromItem(item, reposDefaultBranch))
+
+	return items
+}
+
+const getApiCodeUrl = (username) => {
+	const apiUrl = "https://api.github.com/search/code?per_page=100&q=user:"
+	return apiUrl + username + getLanguages()
+}
+
+const searchFiles = async (username) => {
+	const url = getApiCodeUrl(username)
+	const pagesIndex = ListUtils.range(1, 11) // eslint-disable-line no-magic-numbers
+
+	const reposDefaultBranch = await getReposDefaultBranch(username)
+
+	const urlsPromise = pagesIndex.map(pageNumber => getItemsFromPage(pageNumber, url, reposDefaultBranch))
+
+	const urls = await Promise.all(urlsPromise)
+	const flattenUrls = ListUtils.flatten(urls)
+
+	console.log("Urls finished")
+
+	return flattenUrls
+}
+
+export const getUrlsFromUser = async (username) => {
+	const urls = await searchFiles(username)
+	const generatorUrls = urls.map(url => getFileFromUrl(url))
+
+	return generatorUrls
 }

@@ -13,7 +13,7 @@ module.exports = {
         "array-bracket-newline": "error",
         "array-bracket-spacing": "error",
         "array-callback-return": "error",
-        "array-element-newline": "error",
+        "array-element-newline": ["error", {"minItems": 3}],
         "arrow-body-style": "off",
         "arrow-parens": "off",
         "arrow-spacing": [

@@ -1,13 +1,13 @@
+import "chart.js"
+
 import * as GitHubGather from "./github_gather.js"
 import * as KeyboardLayoutCreator from "./keyboard_layout_creator.js"
 import * as TextFrequency from "./text_frequency.js"
 import * as VirtualKeybord from "./virtual_keyboard.js"
 
+import Chartkick from "chartkick"
 import Vue from "../node_modules/vue/dist/vue.js"
-
-import Chartkick from 'chartkick'
-import VueChartkick from 'vue-chartkick'
-import Chart from 'chart.js'
+import VueChartkick from "vue-chartkick"
 
 Vue.use(VueChartkick, { Chartkick })
 

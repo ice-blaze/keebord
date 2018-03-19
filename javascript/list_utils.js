@@ -21,3 +21,7 @@ export const mergeDicts = (dictA, dictB) => {
 export const reduceDicts = (dicts) => {
 	return dicts.reduce(dic => mergeDicts({}, dic))
 }
+
+export const range = (min, max) => {
+	return Array.from(Array(max).keys()).slice(min)
+}
