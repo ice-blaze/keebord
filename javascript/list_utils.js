@@ -25,3 +25,15 @@ export const reduceDicts = (dicts) => {
 export const range = (min, max) => {
 	return Array.from(Array(max).keys()).slice(min)
 }
+
+export const convertPairsToDict = (pairs) => {
+	const resultDictionary = {}
+	const key = 0
+	const value = 1
+
+	pairs.forEach(pair => {
+		resultDictionary[pair[key]] = pair[value]
+	})
+
+	return resultDictionary
+}

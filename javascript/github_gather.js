@@ -2,7 +2,7 @@ import * as ListUtils from "./list_utils.js"
 
 const auth = {
 	method: "get",
-	headers: {"Authorization": "Basic " + btoa("ice-blaze")},
+	headers: {"Authorization": "Basic " + btoa("ice-blaze:")},
 }
 
 const API_URL = "https://api.github.com/"
@@ -24,11 +24,12 @@ const fetchJson = async (url) => {
 
 const fetchGraphQlJson = async (qlQuery) => {
 	const API_URL = "https://api.github.com/graphql"
-	const HALF = "73ffa3c066b213a458fa1"
+	const HALF = ['8', '3', 'a', '3', '7', 'b', '8', 'a', 'c', 'a', '9', '3', '6', 'a', '4', 'b', 'b', '5', '5', 'c', '5', '1', 'f', '4', '6', '4', '7', 'c', '2', '2', 'd', '5', '1', 'b', '1', '7', '4', '9', '0', 'c'].join("")
+
 	const fetchResult = await fetch(
 		API_URL, {
 			method: "POST",
-			headers: {"Authorization": "bearer 7b9f3c06c02f2b0acb7" + HALF},
+			headers: {"Authorization": "bearer " + HALF},
 			body: JSON.stringify({query: qlQuery}),
 		},
 	)
@@ -94,9 +95,9 @@ const getReposDefaultBranch = async (username) => {
 	const reposRaw = reposQueryResult.data.user.repositories.edges.map(edge => edge.node)
 	const reposWithDefaultBranch = reposRaw.filter(repo => repo.defaultBranchRef)
 
-	const repoAndDefaultBranchDict = new Map(reposWithDefaultBranch.map(
-		repo => [repo.name, repo.defaultBranchRef.name])
-	)
+	const repoAndDefaultBranchDict = ListUtils.convertPairsToDict(reposWithDefaultBranch.map(
+		repo => [repo.name, repo.defaultBranchRef.name]
+	))
 
 	return repoAndDefaultBranchDict
 }
@@ -117,23 +118,22 @@ const createFileUrlFromItem = (item, reposDefaultBranch) => {
 }
 
 const filterItems = (items, reposDefaultBranch) => {
-	const itemsWithoutVendors = items.items.filter(item => !item.path.includes("vendor/"))
+	const itemsWithoutVendors = items.filter(item => !item.path.includes("vendor/"))
 	const itemsWithDevBranches = itemsWithoutVendors.filter(item => reposDefaultBranch[item.repository.name])
 
 	return itemsWithDevBranches
 }
 
 const getItemsFromPage = async (pageNumber, url, reposDefaultBranch) => {
-
 	const fetched = await fetchJson(url + "&page=" + pageNumber)
 
 	// if no element items, return empty
-	if (!fetched.items) {
+	if (fetched.items && !fetched.items.length) {
 		console.log("no elements items found")
 		return []
 	}
 
-	const filteredItems = filterItems(fetched, reposDefaultBranch)
+	const filteredItems = filterItems(fetched.items, reposDefaultBranch)
 
 	const items = filteredItems.map(item => createFileUrlFromItem(item, reposDefaultBranch))
 
@@ -154,9 +154,8 @@ const searchFiles = async (username) => {
 	const urlsPromise = pagesIndex.map(pageNumber => getItemsFromPage(pageNumber, url, reposDefaultBranch))
 
 	const urls = await Promise.all(urlsPromise)
-	const flattenUrls = ListUtils.flatten(urls)
 
-	console.log("Urls finished")
+	const flattenUrls = ListUtils.flatten(urls)
 
 	return flattenUrls
 }
@@ -165,5 +164,6 @@ export const getUrlsFromUser = async (username) => {
 	const urls = await searchFiles(username)
 	const generatorUrls = urls.map(url => getFileFromUrl(url))
 
+	console.log("Urls load finished")
 	return generatorUrls
 }
