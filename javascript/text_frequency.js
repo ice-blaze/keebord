@@ -1,4 +1,5 @@
 import * as ListUtils from "./list_utils.js"
+import $ from "jquery";
 
 export const US_CHARS = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
 
@@ -39,19 +40,48 @@ export const getFrequencyDictionaryFromText = (text) => {
 	return dictionary
 }
 
-const getFrequenciesDictonariesFromFiles = async (filesGeneratorPromise) => {
-	const filesGenerator = await filesGeneratorPromise
+const loading = {
+	// atomic ??
+	current: 0,
+	maximum: 1,
+	init(maximum) {
+		this.maximum = maximum
+		this.current = 0
+	},
+	percentage() {
+		return this.current / this.maximum * 100 // eslint-disable-line no-magic-numbers
+	},
+	cleanUI() {
+		$("#loading").empty()
+	},
+	updateUI() {
+		this.current += 1
+		this.cleanUI()
+		$("#loading").append(`<div class="progress">
+			<div class="progress-bar" role="progressbar" style="width: ${this.percentage()}%"></div>
+		</div>
+		Finished / Total: ${this.current} / ${this.maximum}
+		`)
+	},
+}
+
+const getFrequenciesDictonariesFromFiles = (filesGenerator) => {
 	return filesGenerator.map(async fileGenerator => {
 		const text = (await fileGenerator.next()).value
 		const dictionary = getFrequencyDictionaryFromText(text)
+
+		loading.updateUI()
 
 		return dictionary
 	})
 }
 
 export const getFrequenciesDictonaryFromFiles = async (filesGenerator) => {
-	const arrayOfPromiseOfDictionaries = await getFrequenciesDictonariesFromFiles(filesGenerator)
+	const arrayOfPromiseOfDictionaries = getFrequenciesDictonariesFromFiles(filesGenerator)
+	loading.init(arrayOfPromiseOfDictionaries.length)
+
 	const dicts = await Promise.all(arrayOfPromiseOfDictionaries)
+	loading.cleanUI()
 
 	const mergedDict = ListUtils.reduceDicts(dicts)
 	return mergedDict

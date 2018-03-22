@@ -1,15 +1,16 @@
 import "chart.js"
 
+import * as DisplayErrors from "./display/errors.js"
 import * as GitHubGather from "./github_gather.js"
+import * as KeyboardDisplay from "./display/keyboard.js"
 import * as KeyboardLayoutCreator from "./keyboard_layout_creator.js"
 import * as TextFrequency from "./text_frequency.js"
-import * as VirtualKeybord from "./virtual_keyboard.js"
 
 import Chartkick from "chartkick"
 import Vue from "../node_modules/vue/dist/vue.js"
 import VueChartkick from "vue-chartkick"
 
-Vue.use(VueChartkick, { Chartkick })
+Vue.use(VueChartkick, {Chartkick})
 
 
 new Vue({
@@ -35,24 +36,24 @@ new Vue({
 				}
 			})
 		},
-		searchGithubUserProjects() {
-			VirtualKeybord.drawLoading()
+		async searchGithubUserProjects() {
+			KeyboardDisplay.drawLoading()
 			// this.frequenciesDictionary = "Loading..."
 			const gitHubUsername = this.gitHubUsername
-			const urlsGenerator = GitHubGather.getUrlsFromUser(gitHubUsername)
-			const frequencyDict = TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 
-			frequencyDict.then(dict => {
-				const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
-				this.frequenciesDictionary = KeyboardLayoutCreator.getSortedFrequencyPairs(dict)
-				this.finishedLoaded = true
-				VirtualKeybord.drawVirtualKeyboard(keyboardLayout)
-			})
+			const urlsGenerator = await GitHubGather.getUrlsFromUser(gitHubUsername)
+
+			const frequencyDict = await TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
+
+			const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(frequencyDict)
+			this.frequenciesDictionary = KeyboardLayoutCreator.getSortedFrequencyPairs(frequencyDict)
+			this.finishedLoaded = true
+			KeyboardDisplay.drawKeyboard(keyboardLayout)
 		},
 	},
-});
+})
 
 // debug
 // const dict = TextFrequency.getFrequencyDictionaryFromText(TextFrequency.US_CHARS)
 // const qwertyLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
-// VirtualKeybord.drawVirtualKeyboard(qwertyLayout)
+// KeyboardDisplay.drawKeyboard(qwertyLayout)

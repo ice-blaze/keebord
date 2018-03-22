@@ -18,7 +18,7 @@ const appendLine = (line) => {
 }
 
 /* eslint-disable no-magic-numbers, max-statements */
-export const drawVirtualKeyboard = (keyboardLayout) => {
+export const drawKeyboard = (keyboardLayout) => {
 	$("#keyboard").empty()
 	appendLine(keyboardLayout[0])
 	$("#keyboard").append("<li class='delete lastitem'>&#x232b;</li>")

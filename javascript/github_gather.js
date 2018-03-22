@@ -1,3 +1,4 @@
+import * as DisplayErrors from "./display/errors.js"
 import * as ListUtils from "./list_utils.js"
 
 const auth = {
@@ -9,16 +10,35 @@ const API_URL = "https://api.github.com/"
 
 const ERROR_NO_RIGHTS = 403
 
+
+const getTimeFromExceed = (fetchResult) => {
+	const resetMiliSeconds = fetchResult.headers.get("X-RateLimit-Reset")
+	const miliToSeconds = 1000
+	return new Date(resetMiliSeconds * miliToSeconds)
+}
+
+const haveFetchNoRemainingRateLimit = (fetchResult) => {
+	return fetchResult.headers.get("X-RateLimit-Remaining") == 0 // eslint-disable-line no-magic-numbers
+}
+
+const isFetchStatusForbidden = (fetchResult) => {
+	return fetchResult.status === ERROR_NO_RIGHTS
+}
+
+const isFetchExceed = (fetchResult) => {
+	return isFetchStatusForbidden(fetchResult) && haveFetchNoRemainingRateLimit(fetchResult)
+}
+
 const fetchJson = async (url) => {
 	const fetchResult = await fetch(url, auth)
-	const json = await fetchResult.json()
 
-	if (fetchResult.status === ERROR_NO_RIGHTS) {
-		console.log("HUMHUM no more credits... API")
+	if (isFetchExceed(fetchResult)) {
+		DisplayErrors.displayNoMoreCredits(getTimeFromExceed(fetchResult))
+		console.log(fetchResult.json())
 		return []
 	}
 
-	return json
+	return fetchResult.json()
 }
 
 
@@ -128,8 +148,7 @@ const getItemsFromPage = async (pageNumber, url, reposDefaultBranch) => {
 	const fetched = await fetchJson(url + "&page=" + pageNumber)
 
 	// if no element items, return empty
-	if (fetched.items && !fetched.items.length) {
-		console.log("no elements items found")
+	if (!fetched.items) {
 		return []
 	}
 
@@ -164,6 +183,5 @@ export const getUrlsFromUser = async (username) => {
 	const urls = await searchFiles(username)
 	const generatorUrls = urls.map(url => getFileFromUrl(url))
 
-	console.log("Urls load finished")
 	return generatorUrls
 }

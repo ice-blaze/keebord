@@ -121,7 +121,7 @@ const convertLayoutToPairsList = (layoutString) => {
 	/* eslint-disable no-magic-numbers */
 }
 
-const convertPairListToVirtualKeyboardFormat = (pairList) => {
+const convertPairListToKeyboardFormat = (pairList) => {
 	/* eslint-disable no-magic-numbers */
 	return [
 		pairList.slice(0, 13),
@@ -136,7 +136,7 @@ export const getKeyboardLayout = (frequencyDictionary) => {
 	const completeFreqDict = addMissingChars(frequencyDictionary)
 	const layoutString = convertFrequencyDictionaryIntoString(completeFreqDict)
 	const pairList = convertLayoutToPairsList(layoutString)
-	const virtualKeyboardFormat = convertPairListToVirtualKeyboardFormat(pairList)
+	const keyboardFormat = convertPairListToKeyboardFormat(pairList)
 
-	return virtualKeyboardFormat
+	return keyboardFormat
 }
