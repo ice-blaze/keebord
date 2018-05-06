@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = {
 	entry: "./imports.js",
@@ -10,14 +10,12 @@ module.exports = {
 		rules: [
 			{
 				test: /\.scss$/,
-				use: [{
-					loader: "style-loader"
-				}, {
-					loader: "css-loader"
-				}, {
-					loader: "sass-loader",
-				}]
+				use: [
+					{loader: "style-loader"},
+					{loader: "css-loader"},
+					{loader: "sass-loader"},
+				],
 			},
-		]
+		],
 	},
 };
