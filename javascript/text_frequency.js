@@ -3,7 +3,7 @@ import $ from "jquery";
 
 export const US_CHARS = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
 
-const removeSameLettersFollowing = (text) => {
+export const removeSameLettersFollowing = (text) => {
 	// TODO removeSameLettersFollowing
 	return text
 }

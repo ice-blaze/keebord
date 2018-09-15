@@ -34,3 +34,17 @@ services:
       - PATH=/code/node_modules/.bin:$PATH
     command: "webpack --config webpack.development.js -w --mode development"
 
+  test:
+    image: node:9.8.0
+    working_dir: "/code"
+    volumes:
+      - .:/code
+    environment:
+      - PATH=/code/node_modules/.bin:$PATH
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm install
+        webpack --config webpack.test.js --mode development
+        mocha build_test/bundle.js

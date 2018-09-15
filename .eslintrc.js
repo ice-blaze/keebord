@@ -1,7 +1,11 @@
 module.exports = {
     "env": {
         "browser": true,
+        "mocha": true,
         "es6": true
+    },
+    "ecmaFeatures": {
+      modules: true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
