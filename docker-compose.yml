@@ -19,8 +19,12 @@ services:
       - .:/code
     environment:
       - PATH=/code/node_modules/.bin/:$PATH
-    command: "reload -b -p 80"
-
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        npm install
+        reload -b -p 80
   watch:
     image: node:9.8.0
     working_dir: "/code"
