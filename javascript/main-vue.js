@@ -12,6 +12,76 @@ import VueChartkick from "vue-chartkick"
 
 Vue.use(VueChartkick, {Chartkick})
 
+import Cheerio from "cheerio"
+
+const fetchText = (url) => {
+  return fetch(url).then((response) => {
+    return response.text()
+  })
+}
+
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+const getProjectsFromDom = (dom) => {
+  const cheerDom = Cheerio.load(dom)
+
+  const nextURL = cheerDom("a:contains('Next')").attr("href")
+  // get all projects
+  const repoUrlList = []
+  cheerDom("a[itemprop='name codeRepository']")
+    .each((idx, val) => {
+      repoUrlList.push(val.attribs.href)
+    })
+
+  return {
+    urls: repoUrlList,
+    next: nextURL,
+  }
+}
+
+const projectsUrls = {
+  urls: [],
+  isFinished: false,
+}
+
+const getProjectsUrl = (url) => {
+  fetchText(url)
+    .then((firstDom) => {
+      const res = getProjectsFromDom(firstDom)
+      projectsUrls.urls = projectsUrls.urls.concat(res.urls)
+      if (res.next) {
+        getProjectsUrl(res.next)
+      } else {
+        projectsUrls.isFinished = true
+      }
+    })
+}
+
+const isFinishedSyncTime = 300
+const finishWhenProjectsGathered = new Promise(async (resolve) => {
+  getProjectsUrl("https://github.com/ice-blaze?tab=repositories")
+
+  while (!projectsUrls.isFinished) {
+    await sleep(isFinishedSyncTime)
+  }
+
+  resolve(projectsUrls.urls);
+})
+
+finishWhenProjectsGathered.then((urls) => {
+  console.log(urls)
+})
+
+
+
+
+const promiseList = []
+Promise.all(promiseList).then((values) => {
+  console.log(values)
+})
+
 
 new Vue({
 	el: "#app",
