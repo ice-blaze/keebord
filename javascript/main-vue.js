@@ -1,101 +1,41 @@
 import "chart.js"
 
 import * as DisplayErrors from "./display/errors.js"
-import * as GitHubGather from "./github_gather.js"
+import * as GitHubGatherAPI from "./gather/github_gather_api.js"
+import * as GitHubGatherScrapping from "./gather/github_gather_webscraping.js"
 import * as KeyboardDisplay from "./display/keyboard.js"
 import * as KeyboardLayoutCreator from "./keyboard_layout_creator.js"
 import * as TextFrequency from "./text_frequency.js"
 
 import Chartkick from "chartkick"
+import Limits from "./gather/limits.js"
 import Vue from "../node_modules/vue/dist/vue.js"
 import VueChartkick from "vue-chartkick"
 
 Vue.use(VueChartkick, {Chartkick})
 
-import Cheerio from "cheerio"
 
-const fetchText = (url) => {
-  return fetch(url).then((response) => {
-    return response.text()
-  })
-}
-
-const sleep = (milliseconds) => {
-  return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
-
-const getProjectsFromDom = (dom) => {
-  const cheerDom = Cheerio.load(dom)
-
-  const nextURL = cheerDom("a:contains('Next')").attr("href")
-  // get all projects
-  const repoUrlList = []
-  cheerDom("a[itemprop='name codeRepository']")
-    .each((idx, val) => {
-      repoUrlList.push(val.attribs.href)
-    })
-
-  return {
-    urls: repoUrlList,
-    next: nextURL,
-  }
-}
-
-const projectsUrls = {
-  urls: [],
-  isFinished: false,
-}
-
-const getProjectsUrl = (url) => {
-  fetchText(url)
-    .then((firstDom) => {
-      const res = getProjectsFromDom(firstDom)
-      projectsUrls.urls = projectsUrls.urls.concat(res.urls)
-      if (res.next) {
-        getProjectsUrl(res.next)
-      } else {
-        projectsUrls.isFinished = true
-      }
-    })
-}
-
-const isFinishedSyncTime = 300
-const finishWhenProjectsGathered = new Promise(async (resolve) => {
-  getProjectsUrl("https://github.com/ice-blaze?tab=repositories")
-
-  while (!projectsUrls.isFinished) {
-    await sleep(isFinishedSyncTime)
-  }
-
-  resolve(projectsUrls.urls);
-})
-
-finishWhenProjectsGathered.then((urls) => {
-  console.log(urls)
-})
-
-
-
-
-const promiseList = []
-Promise.all(promiseList).then((values) => {
-  console.log(values)
-})
-
-
-new Vue({
+const test = new Vue({
 	el: "#app",
 	data: {
-		gitHubUsername: "",
+		filesLimit: 200,
+		depthLimit: 2,
+		projectsLimit: 15,
+		gitHubUsername: "ice-blaz",
 		doesGitHubUserExist: "",
 		frequenciesDictionary: [],
+    projectsUsed: [],
 		finishedLoaded: false,
 		userIsValid: false,
 		userIsInvalid: false,
+    optionsVisibility: false,
 	},
 	methods: {
+    showOptions() {
+      this.optionsVisibility = !this.optionsVisibility
+    },
 		userExist() {
-			GitHubGather.userExist(this.gitHubUsername).then(isValid => {
+			GitHubGatherAPI.userExist(this.gitHubUsername).then(isValid => {
 				if (isValid) {
 					this.userIsValid = true
 					this.userIsInvalid = false
@@ -109,9 +49,18 @@ new Vue({
 		async searchGithubUserProjects() {
 			KeyboardDisplay.drawLoading()
 			// this.frequenciesDictionary = "Loading..."
-			const gitHubUsername = this.gitHubUsername
+      const limits = new Limits(
+        test.projectsLimit,
+        test.depthLimit,
+        test.filesLimit
+      )
+			// const urlsGenerator2 = await GitHubGatherAPI.getUrlsFromUser(gitHubUsername)
+      const urlsFromUser = new GitHubGatherScrapping.UrlsFromUser(
+        this.gitHubUsername, limits
+      )
 
-			const urlsGenerator = await GitHubGather.getUrlsFromUser(gitHubUsername)
+			const urlsGenerator = await urlsFromUser.retrieveUrls()
+      this.projectsUsed = urlsFromUser.projects
 
 			const frequencyDict = await TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 
@@ -122,6 +71,18 @@ new Vue({
 		},
 	},
 })
+
+// GitHubGatherScrapping.projectsFromUser("ice-blaze").then((urls) => {
+//   GitHubGatherScrapping.retrieveAllFilesFromAProject(urls)
+// })
+const limits = new Limits(
+  test.projectsLimit,
+  test.depthLimit,
+  test.filesLimit
+)
+const urlsFromUser = new GitHubGatherScrapping.UrlsFromUser("ice-blaze", limits)
+urlsFromUser.retrieveUrls()
+// GitHubGatherScrapping.getUrlsFromUser("ice-blaze", limits)
 
 // debug
 // const dict = TextFrequency.getFrequencyDictionaryFromText(TextFrequency.US_CHARS)
