@@ -30,10 +30,7 @@ import * as TextFrequency from "./text_frequency.js"
 // TODO move to utils
 const zip = (arr, ...arrs) => {
 	return arr.map((val, i) => arrs.reduce(
-		(a, arr) => [
-			...a,
-			arr[i],
-		], [val]
+		(a, arr) => [...a, arr[i]], [val]
 	));
 }
 
@@ -49,10 +46,7 @@ const weightsConversion = [
 
 const convertDictoToPairsList = (dict) => {
 	const items = Object.keys(dict).map(keyDict => {
-		return [
-			keyDict,
-			dict[keyDict],
-		]
+		return [keyDict, dict[keyDict]]
 	})
 	return items
 }
