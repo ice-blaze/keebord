@@ -19,7 +19,7 @@ export const mergeDicts = (dictA, dictB) => {
 }
 
 export const reduceDicts = (dicts) => {
-	return dicts.reduce(dic => mergeDicts({}, dic), {})
+	return dicts.reduce((accDic, currentDic) => mergeDicts(accDic, currentDic), {})
 }
 
 export const range = (min, max) => {
@@ -36,4 +36,10 @@ export const convertPairsToDict = (pairs) => {
 	})
 
 	return resultDictionary
+}
+
+export const sliceFromStart = (array, numberOfElements) => {
+  const startArrayIndex = 0
+
+  return array.slice(startArrayIndex, numberOfElements);
 }

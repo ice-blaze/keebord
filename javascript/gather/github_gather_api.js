@@ -1,5 +1,5 @@
-import * as DisplayErrors from "./display/errors.js"
-import * as ListUtils from "./list_utils.js"
+import * as DisplayErrors from "../display/errors.js"
+import * as ListUtils from "../list_utils.js"
 
 const auth = {
 	method: "get",
@@ -18,7 +18,7 @@ const getTimeFromExceed = (fetchResult) => {
 }
 
 const haveFetchNoRemainingRateLimit = (fetchResult) => {
-	return fetchResult.headers.get("X-RateLimit-Remaining") == 0 // eslint-disable-line no-magic-numbers
+	return fetchResult.headers.get("X-RateLimit-Remaining") === 0 // eslint-disable-line no-magic-numbers
 }
 
 const isFetchStatusForbidden = (fetchResult) => {
@@ -44,7 +44,7 @@ const fetchJson = async (url) => {
 
 const fetchGraphQlJson = async (qlQuery) => {
 	const API_URL = "https://api.github.com/graphql"
-	const HALF = ['8', '3', 'a', '3', '7', 'b', '8', 'a', 'c', 'a', '9', '3', '6', 'a', '4', 'b', 'b', '5', '5', 'c', '5', '1', 'f', '4', '6', '4', '7', 'c', '2', '2', 'd', '5', '1', 'b', '1', '7', '4', '9', '0', 'c'].join("")
+	const HALF = ["8", "3", "a", "3", "7", "b", "8", "a", "c", "a", "9", "3", "6", "a", "4", "b", "b", "5", "5", "c", "5", "1", "f", "4", "6", "4", "7", "c", "2", "2", "d", "5", "1", "b", "1", "7", "4", "9", "0", "c"].join("") // eslint-disable-line array-element-newline
 
 	const fetchResult = await fetch(
 		API_URL, {
@@ -63,7 +63,7 @@ const fetchGraphQlJson = async (qlQuery) => {
 	return json
 }
 
-const getFileFromUrl = async function *(url) {
+export const getFileFromUrl = async function *(url) {
 	const fetchResult = await fetch(url)
 	const text = await fetchResult.text()
 	yield text
@@ -181,7 +181,7 @@ const searchFiles = async (username) => {
 
 export const getUrlsFromUser = async (username) => {
 	const urls = await searchFiles(username)
-	const generatorUrls = urls.map(url => getFileFromUrl(url))
+	const generatorUrls = urls.map(getFileFromUrl)
 
 	return generatorUrls
 }
