@@ -55,9 +55,9 @@ export class UrlsFromUser {
   }
 
   async retrieveUrls() {
-    const projects = await this.projectsFromUser()
+    this.projects = await this.projectsFromUser()
 
-    const projectsPromise = projects.map(
+    const projectsPromise = this.projects.map(
       project => this.retrieveAllFilesFromAProject(this, project)
     )
 
