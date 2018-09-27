@@ -34,6 +34,15 @@ services:
       - PATH=/code/node_modules/.bin:$PATH
     command: "webpack --config webpack.development.js -w --mode development"
 
+  lint:
+    image: node:10.10.0
+    working_dir: "/code"
+    volumes:
+      - .:/code
+    environment:
+      - PATH=/code/node_modules/.bin:$PATH
+    command: "npm run lint"
+
   test:
     image: node:10.10.0
     working_dir: "/code"
