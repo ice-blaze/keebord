@@ -81,7 +81,7 @@ export const userExist = async (username) => {
 }
 
 const repoGqlQuery = (username, afterId) => {
-    let afterString = ""
+	let afterString = ""
 	if (afterId) {
 		afterString = ", after: \"\""
 	}

@@ -10,13 +10,13 @@ const addShiftActivation = () => {
 const appendLine = (line) => {
 	const KEY = 0
 	const VAL = 1
-  let result = ""
+	let result = ""
 	for (const tuple of line) {
-    // select last keyboard-row
-    // TODO add tests with fake keyboard
-    result += `<div class="key"><span>${tuple[KEY]}<br/>${tuple[VAL]}</span></div>`
+		// select last keyboard-row
+		// TODO add tests with fake keyboard
+		result += `<div class="key"><span>${tuple[KEY]}<br/>${tuple[VAL]}</span></div>`
 	}
-  return result
+	return result
 }
 
 const capsLockKey = `
@@ -65,47 +65,47 @@ const spaceKeyRow = `
 const newRow = (id, content) => `<div class='keyboard-row' id='${id}'>${content}</div>`
 
 const createFirstRow = (row) => {
-  return newRow(
-    "firstRow",
-    appendLine(row) + backspaceKey
-  )
+	return newRow(
+		"firstRow",
+		appendLine(row) + backspaceKey
+	)
 }
 
 const createSecondRow = (row) => {
-  return newRow(
-    "secondRow",
-    tabKey +
-    appendLine(row)
-  )
+	return newRow(
+		"secondRow",
+		tabKey +
+		appendLine(row)
+	)
 }
 
 const createThirdRow = (row) => {
-    return newRow(
-    "thirdRow",
-    capsLockKey +
-	appendLine(row) +
-      enterKey
-  )
+	return newRow(
+		"thirdRow",
+		capsLockKey +
+			appendLine(row) +
+			enterKey
+	)
 }
 
 const createFourthRow = (row) => {
-  return newRow(
-    "fourthRow",
-    leftShiftKey +
-      appendLine(row) +
-      rightShiftKey
-  )
+	return newRow(
+		"fourthRow",
+		leftShiftKey +
+			appendLine(row) +
+			rightShiftKey
+	)
 }
 
 export const drawKeyboard = (keyboardLayout) => {
-  const keyboard = $("#keyboard")
-  keyboard.empty()
+	const keyboard = $("#keyboard")
+	keyboard.empty()
 
-  const keyboardDom = createFirstRow(keyboardLayout.firstRow) +
-    createSecondRow(keyboardLayout.secondRow) +
-    createThirdRow(keyboardLayout.thirdRow) +
-    createFourthRow(keyboardLayout.fourthRow) +
-    `${spaceKeyRow}</div>`
+	const keyboardDom = createFirstRow(keyboardLayout.firstRow) +
+		createSecondRow(keyboardLayout.secondRow) +
+		createThirdRow(keyboardLayout.thirdRow) +
+		createFourthRow(keyboardLayout.fourthRow) +
+		`${spaceKeyRow}</div>`
 
 	keyboard.append(keyboardDom)
 	addShiftActivation()

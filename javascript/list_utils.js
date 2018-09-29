@@ -39,7 +39,7 @@ export const convertPairsToDict = (pairs) => {
 }
 
 export const sliceFromStart = (array, numberOfElements) => {
-  const startArrayIndex = 0
+	const startArrayIndex = 0
 
-  return array.slice(startArrayIndex, numberOfElements);
+	return array.slice(startArrayIndex, numberOfElements);
 }
