@@ -1,3 +1,20 @@
 .padding {
     padding: 0.5em;
 }
+
+$gradiant-color: linear-gradient(to left, #12c2e9, #c471ed, #f64f59);
+$gradiant-color-nored: linear-gradient(to left, #12c2e9, #c471ed);
+
+#github-user {
+    // leave it for fun for now, disable the round corners
+    border-image-source: $gradiant-color-nored;
+    border-width: 1px;
+    border-image-slice: 1;
+}
+
+h1 {
+    // color: $gradiant-color;
+    background: $gradiant-color;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

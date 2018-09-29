@@ -80,6 +80,7 @@ module.exports = {
             "error",
             "beside"
         ],
+        // "indent": ["error", "tab"],
         "indent": "off",
         "indent-legacy": "off",
         "init-declarations": "error",
