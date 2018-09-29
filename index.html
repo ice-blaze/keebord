@@ -134,10 +134,10 @@
 			  </div>
 			</div>
 		</div>
-		<div class="row padding">
-			<div class="keyboard_container">
-				<ul id="keyboard">
-				</ul>
+		<div class="padding">
+			<div class="keyboard_container" v-show="finishedLoaded">
+        <div class="keyboard" id="keyboard">
+        </div>
 			</div>
 			<div id="find_files" class="col col-12 text-center padding">
 			</div>
@@ -190,7 +190,6 @@
             <li class="list-group-item active">Projects list</li>
             <li v-for="project in projectsUsed" class="list-group-item">
               <a :href="'https://www.github.com/' + project"> {{project}} </a>
-							
             </li>
           </ul>
 				</div>

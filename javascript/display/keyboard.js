@@ -10,32 +10,107 @@ const addShiftActivation = () => {
 const appendLine = (line) => {
 	const KEY = 0
 	const VAL = 1
+  let result = ""
 	for (const tuple of line) {
-		$("#keyboard").append(
-			`<li><span class="unshifted">${tuple[KEY]}</span><span class="shifted">${tuple[VAL]}</span></li>`
-		)
+    // select last keyboard-row
+    // TODO add tests with fake keyboard
+    result += `<div class="key"><span>${tuple[KEY]}<br/>${tuple[VAL]}</span></div>`
 	}
+  return result
 }
 
-/* eslint-disable no-magic-numbers, max-statements */
-export const drawKeyboard = (keyboardLayout) => {
-	$("#keyboard").empty()
-	appendLine(keyboardLayout[0])
-	$("#keyboard").append("<li class='delete lastitem'>&#x232b;</li>")
-	$("#keyboard").append("<li class='tab'>↹</li>")
-	appendLine(keyboardLayout[1])
-	$("#keyboard").append("<li class='capslock'>&#8682;</li>")
-	appendLine(keyboardLayout[2])
-	$("#keyboard").append("<li class='return lastitem'>&#9166;</li>")
-	$("#keyboard").append("<li class='left-shift'>&#8679;</li>")
-	appendLine(keyboardLayout[3])
-	$("#keyboard").append("<li class='right-shift lastitem'>&#8679;</li>")
-	$("#keyboard").append("<li class='space lastitem'>&nbsp;</li>")
+const capsLockKey = `
+<div class='key lowercase lower-left extra-size-two'>
+  <span class='lower-row-text'>caps lock</span>
+  <span class='absolute-left caps-dot'>&bull;</span>
+</div>
+`
 
+const backspaceKey = `
+<div class='key extra-size lowercase lower-right'>
+  <span class='lower-row-text'>backspace</span>
+</div>
+`
+
+const enterKey = `
+<div class='key extra-size-two lowercase lower-right'>
+  <span class='lower-row-text'>enter</span>
+</div>
+`
+
+const tabKey = `
+<div class='key extra-size lowercase lower-left'>
+  <span class='lower-row-text'>tab</span>
+</div>
+`
+
+const rightShiftKey = `
+<div class='key double-size lowercase lower-right'>
+  <span class='lower-row-text'>shift</span>
+</div>
+`
+
+const leftShiftKey = `
+<div class='key double-size lowercase lower-left'>
+  <span class='lower-row-text'>shift</span>
+</div>
+`
+
+const spaceKeyRow = `
+<div class='keyboard-row bottom-row'>
+  <div class='key'></div>
+</div>
+`
+
+const newRow = (id, content) => `<div class='keyboard-row' id='${id}'>${content}</div>`
+
+const createFirstRow = (row) => {
+  return newRow(
+    "firstRow",
+    appendLine(row) + backspaceKey
+  )
+}
+
+const createSecondRow = (row) => {
+  return newRow(
+    "secondRow",
+    tabKey +
+    appendLine(row)
+  )
+}
+
+const createThirdRow = (row) => {
+    return newRow(
+    "thirdRow",
+    capsLockKey +
+	appendLine(row) +
+      enterKey
+  )
+}
+
+const createFourthRow = (row) => {
+  return newRow(
+    "fourthRow",
+    leftShiftKey +
+      appendLine(row) +
+      rightShiftKey
+  )
+}
+
+export const drawKeyboard = (keyboardLayout) => {
+  const keyboard = $("#keyboard")
+  keyboard.empty()
+
+  const keyboardDom = createFirstRow(keyboardLayout.firstRow) +
+    createSecondRow(keyboardLayout.secondRow) +
+    createThirdRow(keyboardLayout.thirdRow) +
+    createFourthRow(keyboardLayout.fourthRow) +
+    `${spaceKeyRow}</div>`
+
+	keyboard.append(keyboardDom)
 	addShiftActivation()
 }
-/* eslint-enable no-magic-numbers, max-statements */
 
 export const drawLoading = () => {
-	$("#keyboard").append("Loading...")
+	$("#find_files").append("Loading...")
 }

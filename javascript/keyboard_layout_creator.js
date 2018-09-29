@@ -117,12 +117,12 @@ const convertLayoutToPairsList = (layoutString) => {
 
 const convertPairListToKeyboardFormat = (pairList) => {
 	/* eslint-disable no-magic-numbers */
-	return [
-		pairList.slice(0, 13),
-		pairList.slice(13, 26),
-		pairList.slice(26, 37),
-		pairList.slice(37),
-	]
+	return {
+		firstRow: pairList.slice(0, 13),
+		secondRow: pairList.slice(13, 26),
+		thirdRow: pairList.slice(26, 37),
+		fourthRow: pairList.slice(37),
+	}
 	/* eslint-disable no-magic-numbers */
 }
 

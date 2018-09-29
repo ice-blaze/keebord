@@ -1,86 +1,104 @@
-#keyboard {
-	margin: 0;
-	padding: 0;
-	list-style: none;
+.keyboard_container {
+  /* padding: 30px 8px 8px; */
+    padding: 1.5em 0.7em 0.7em;
+  /* margin: 60px auto; */
+  /* box-shadow: inset 1px 1px 0px #f1f1f1, 3px 3px 6px 3px #303038; */
+  /* background-color: #e3e3e3; */
+  background: #12c2e9; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #12c2e9, #c471ed, #f64f59); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #12c2e9, #c471ed, #f64f59); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  border-radius: 0.4em 0.4em 0.4em 0.4em;
 }
 
-#keyboard li {
-	float: left;
-	margin: 0 5px 5px 0;
-	width: 2vw; /*40px*/
-	min-width: 20px;
-	height: 2em;
-	line-height: 2em;
-	text-align: center;
-	background: #fff;
-	/* border: 1px solid #f9f9f9; */
-	border: 1px solid #595959;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
+.keyboard-row {
+  display: flex;
 }
 
-.capslock, .tab, .left-shift {
-	clear: left;
-}
+.key {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  height: 40px;
+  margin: 4px;
+  letter-spacing: 0.5px;
+  color: #3a3a3a;
+  background-color: #f7f7f7;
+  flex: 1;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none;
 
-#keyboard .tab, #keyboard .delete {
-	/* width: 70px; */
-	min-width: 30px;
-	width: 3vw;
-}
+  span {
+    display: inline-block;
+    vertical-align: middle;
+  }
 
-#keyboard .capslock {
-	/* width: 80px; */
-	min-width: 40px;
-	width: 4vw;
-}
+  &::before {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+    content: '';
+  }
 
-#keyboard .return {
-	/* width: 77px; */
-	min-width: 35px;
-	width: 3vw;
-}
+  &.extra-size {
+    flex: 1.25;
+  }
+  &.extra-size-two {
+    flex: 1.625;
+  }
+  &.double-size {
+    flex: 2.125;
+  }
 
-#keyboard .left-shift, #keyboard .right-shift {
-	/* width: 95px; */
-	min-width: 50px;
-	width: 5vw;
-	background: linear-gradient(to right, #ff8008, #ffc837);
-	border: 0px;
-}
+  &.lowercase {
+    font-size: 11px;
+    text-transform: lowercase;
+  }
 
-#keyboard .left-shift:hover, #keyboard .right-shift:hover{
-	-webkit-filter: brightness(80%);
-	-webkit-transition: all 0.4s ease;
-	-moz-transition: all 0.4s ease;
-	-o-transition: all 0.4s ease;
-	-ms-transition: all 0.4s ease;
-	transition: all 0.4s ease;
-	cursor: pointer;
-}
+  &.lower-right {
+    vertical-align: bottom;
+    text-align: right;
+    padding-right: 5px;
+  }
+  &.lower-left {
+    vertical-align: bottom;
+    text-align: left;
+    padding-left: 5px;
+  }
+  &.lower-center {
+    vertical-align: bottom;
+  }
 
-.lastitem {
-	margin-right: 0;
-}
+  .lower-row-text {
+    vertical-align: bottom;
+    padding-bottom: 2px;
+  }
 
-.uppercase {
-	text-transform: uppercase;
-}
-
-#keyboard .space {
-	clear: left;
-	/* width: 681px; */
-	min-width: 360px;
-	width: 34vw;
+  .absolute-left ,
+  .absolute-right {
+    position: absolute;
+    top: 5px;
+    font-size: 9px;
+    &.icon {
+      font-size: 12px;
+    }
+  }
+  .absolute-right {
+    right: 5px;
+  }
+  .absolute-left {
+    left: 5px;
+    &.caps-dot {
+      top: 3px;
+      left: 4px;
+    }
+  }
 }
 
 .shifted {
 	display: none;
-}
-
-.keyboard_container {
-	min-width: 360px;
-	width: 36vw;
-	text-align: center;
-	margin: auto;
 }
