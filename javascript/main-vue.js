@@ -24,16 +24,16 @@ new Vue({
 		gitHubUsername: "",
 		doesGitHubUserExist: "",
 		frequenciesDictionary: [],
-    projectsUsed: [],
+		projectsUsed: [],
 		finishedLoaded: false,
 		userIsValid: false,
 		userIsInvalid: false,
-    optionsVisibility: false,
+		optionsVisibility: false,
 	},
 	methods: {
-    showOptions() {
-      this.optionsVisibility = !this.optionsVisibility
-    },
+		showOptions() {
+			this.optionsVisibility = !this.optionsVisibility
+		},
 		userExist() {
 			GitHubGatherAPI.userExist(this.gitHubUsername).then(isValid => {
 				if (isValid) {
@@ -49,18 +49,18 @@ new Vue({
 		async searchGithubUserProjects() {
 			KeyboardDisplay.drawLoading()
 			// this.frequenciesDictionary = "Loading..."
-      const limits = new Limits(
-        this.projectsLimit,
-        this.depthLimit,
-        this.filesLimit
-      )
+			const limits = new Limits(
+				this.projectsLimit,
+				this.depthLimit,
+				this.filesLimit
+			)
 			// const urlsGenerator2 = await GitHubGatherAPI.getUrlsFromUser(gitHubUsername)
-      const urlsFromUser = new GitHubGatherScrapping.UrlsFromUser(
-        this.gitHubUsername, limits
-      )
+			const urlsFromUser = new GitHubGatherScrapping.UrlsFromUser(
+				this.gitHubUsername, limits
+			)
 
 			const urlsGenerator = await urlsFromUser.retrieveUrls()
-      this.projectsUsed = urlsFromUser.projects
+			this.projectsUsed = urlsFromUser.projects
 
 			const frequencyDict = await TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 

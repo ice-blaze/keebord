@@ -5,10 +5,10 @@ export const clearErrors = () => {
 }
 
 const formatSeconds = (seconds) => {
-  const modSeconds = 60
+	const modSeconds = 60
 	const modulatedSeconds = String(Math.round(seconds % modSeconds))
 
-  const oneDigitLength = 1
+	const oneDigitLength = 1
 	if (modulatedSeconds.length === oneDigitLength) {
 		return "0" + modulatedSeconds
 	}
@@ -19,9 +19,9 @@ export const displayNoMoreCredits = (resetMilisecs) => {
 	clearErrors()
 	const now = Date.now()
 	const remainingMiliseconds = resetMilisecs - now
-  const convertToSeconds = 1000
+	const convertToSeconds = 1000
 	const remainingSec = remainingMiliseconds / convertToSeconds
-  const convertToMinutes = 60
+	const convertToMinutes = 60
 	const remainingMin = remainingSec / convertToMinutes
 
 	$("#credits-error").append(`
