@@ -10,14 +10,11 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-light bg-light">
-			<span class="navbar-brand mb-0 h1">Keebord</span>
-			<ul class="navbar-nav">
-					<li class="nav-item active">
-							<a class="nav-link" href="https://ljdchost.com/zA3F72f.gif">Feedback</span></a>
-					</li>
-			</ul>
-	</nav>
+	<div id="top-right" class="row">
+    <a href="https://github.com/ice-blaze/keebord/" target="_blank">
+			<i class="fab fa-github"></i>
+    </a>
+	</div>
 	<div class="container" id="app">
 		<div class="row text-center padding">
 			<div class="col">
@@ -51,9 +48,9 @@
 		</div>
 		<div v-show="!optionsVisibility"  class="row align-items-center " id="search-options-button">
 			<div class="col align-items-center d-flex justify-content-center">
+        <!-- class="btn btn-outline-secondary btn-sm " -->
         <a
           v-on:click="showOptions()"
-          class="btn btn-outline-secondary btn-sm "
           id="options-button"
         >
           <i class="fas fa-cog"></i>
