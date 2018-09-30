@@ -1,5 +1,4 @@
 import * as ListUtils from "../list_utils.js"
-import $ from "jquery";
 import Cheerio from "cheerio"
 import FindingFilesUIUpdate from "./ui_updates/finding_files_loading.js"
 import ValidLanguages from "./valid_languages.js"
@@ -8,41 +7,8 @@ import {getFileFromUrl} from "./github_gather_api.js"
 const GITHUB_BASE = "https://github.com/"
 
 const fetchText = async (url) => {
-	// const head = new Headers({
-	// 	mode: "no-cors",
-	// 	// method: "GET", // *GET, POST, PUT, DELETE, etc.
-	// 	// no-cors, cors, *same-origin
-	// 	// mode: "cors",
-	// 	// cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-	// 	// credentials: "same-origin", // include, same-origin, *omit
-	// 	// origin: "https://github.com/ice-blaze?tab=repositories",
-	// 	headers: {
-	// 		// origin: "https://github.com/ice-blaze?tab=repositories",
-	// 		// "Content-Type": "application/json; charset=utf-8",
-	// 		// https://github.com/ice-blaze?tab=repositories
-	// 		"Access-Control-Allow-Origin": "*",
-	// 		// "Access-Control-Allow-Origin": "https://github.com/ice-blaze?tab=repositories",
-	// 		// "Content-Type": "application/x-www-form-urlencoded",
-	// 	},
-	// })
-	// const toto = Cheerio.load(url)
-	// console.log(toto.text())
-	// const head = new Headers()
-	// const result = await $.getJSON(`http://anyorigin.com/go?url=${encodeURIComponent(url)}&callback=?`);
-	console.log("COUCOU2")
 	const response = await fetch(`https://keebord.herokuapp.com/prox/?url=${encodeURIComponent(url)}`);
 	return response.text()
-	// const result = await $.getJSON(`https://keebord.herokuapp.com/prox/?url=${encodeURIComponent(url)}`);
-	// const result = await $.getJSON(url);
-	// return result.contents
-	// head.append("Access-Control-Allow-Origin", "*")
-	// // console.log(head.get('Access-Control-Allow-Origin'))
-	// // const response = await fetch(`http://anyorigin.com/go?url=${encodeURIComponent(url)}&callback=?`, head)
-	// console.log(`http://anyorigin.com/go?url=${encodeURIComponent(url)}&callback=?`)
-	// console.log('http://anyorigin.com/go?url=https%3A//github.com/ice-blaze%3Ftab%3Drepositories&callback=?')
-	// const response = await fetch(`http://whateverorigin.org/get?url=${encodeURIComponent(url)}&callback=?`, {mode: "no-cors"})
-	// return "TOTO"
-	// return response.text()
 }
 
 const sleep = (milliseconds) => {
