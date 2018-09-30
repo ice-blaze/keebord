@@ -29,10 +29,12 @@ const fetchText = async (url) => {
 	// console.log(toto.text())
 	// const head = new Headers()
 	// const result = await $.getJSON(`http://anyorigin.com/go?url=${encodeURIComponent(url)}&callback=?`);
-	console.log("COUCOU")
-	const result = await $.getJSON(`https://lilprox.herokuapp.com/?url=${encodeURIComponent(url)}`);
+	console.log("COUCOU2")
+	const response = await fetch(`https://keebord.herokuapp.com/prox/?url=${encodeURIComponent(url)}`);
+	return response.text()
+	// const result = await $.getJSON(`https://keebord.herokuapp.com/prox/?url=${encodeURIComponent(url)}`);
 	// const result = await $.getJSON(url);
-	return result.contents
+	// return result.contents
 	// head.append("Access-Control-Allow-Origin", "*")
 	// // console.log(head.get('Access-Control-Allow-Origin'))
 	// // const response = await fetch(`http://anyorigin.com/go?url=${encodeURIComponent(url)}&callback=?`, head)
