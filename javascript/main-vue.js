@@ -21,7 +21,7 @@ new Vue({
 		filesLimit: 200,
 		depthLimit: 2,
 		projectsLimit: 15,
-		gitHubUsername: "ice-blaz",
+		gitHubUsername: "",
 		doesGitHubUserExist: "",
 		frequenciesDictionary: [],
 		projectsUsed: [],

@@ -4,7 +4,7 @@ const port = process.env.PORT || 3000
 const request = require("request")
 const path = require("path")
 
-app.use(express.static("./public"))
+app.use("/public", express.static("./public"))
 
 app.get("/prox", (req, res) => {
 	// TODO only allow github and raw github

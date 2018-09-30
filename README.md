@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/ice-blaze/keebord.svg?style=svg)](https://circleci.com/gh/ice-blaze/keebord)
 
-Demo website https://ice-blaze.github.io/keebord/
+Demo website https://keebord.herokuapp.com/
 
 How to run the website
 ```
