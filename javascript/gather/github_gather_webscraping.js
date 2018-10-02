@@ -1,7 +1,6 @@
 import * as ListUtils from "../list_utils.js"
 import Cheerio from "cheerio"
 import FindingFilesUIUpdate from "./ui_updates/finding_files_loading.js"
-import ValidLanguages from "./valid_languages.js"
 import {getFileFromUrl} from "./github_gather_api.js"
 
 const GITHUB_BASE = "https://github.com/"
@@ -48,10 +47,13 @@ const isFinishedSyncTime = 300
 
 // export default class UrlsFromUser {
 export class UrlsFromUser {
-	constructor(username, limits) {
+	constructor(username, limitsHierarchy, limitsLanguagesAndFolders) {
 		this.findingFilesUI = new FindingFilesUIUpdate()
 		this.username = username
-		this.limits = limits
+		this.limits = {
+			hierarchy: limitsHierarchy,
+			languagesAndFolders: limitsLanguagesAndFolders,
+		}
 	}
 
 	async retrieveUrls() {
@@ -101,7 +103,6 @@ export class UrlsFromUser {
 		url, counter, depth
 	) {
 		const cheerDom = Cheerio.load(await fetchText(url))
-		const languages = new ValidLanguages()
 
 		// get all links
 		cheerDom("a[id].js-navigation-open")
@@ -112,8 +113,8 @@ export class UrlsFromUser {
 
 				if (
 					fileHref.match(regexFolder) &&
-					depth < counter.limits.depth &&
-					!counter.limits.arentTheyReached()
+					depth < counter.limits.hierarchy.depth &&
+					!counter.limits.hierarchy.arentTheyReached()
 				) {
 					counter.foldersMax += 1
 					const nextUrl = GITHUB_BASE + val.attribs.href
@@ -121,9 +122,9 @@ export class UrlsFromUser {
 					this.extractPageUrls(nextUrl, counter, depth + nextDepth)
 				} else if (
 					fileHref.match(regexFile) &&
-					!counter.limits.arentTheyReached()
+						!counter.limits.hierarchy.arentTheyReached()
 				) {
-					this.handleFile(fileHref, counter, languages)
+					this.handleFile(fileHref, counter)
 				}
 			})
 		counter.foldersCurrent += 1
@@ -131,12 +132,12 @@ export class UrlsFromUser {
 		return counter.files
 	}
 
-	handleFile(fileHref, counter, languages) {
+	handleFile(fileHref, counter) {
 		this.findingFilesUI.updateUI()
-		counter.limits.allFilesCounter += 1
+		counter.limits.hierarchy.allFilesCounter += 1
 		counter.filesCounter += 1
 
-		if (languages.isFileValid(fileHref)) {
+		if (counter.limits.languagesAndFolders.isFileValid(fileHref)) {
 			this.findingFilesUI.incValideFileCounter()
 			const rawUrl = fileHref.split(/\/blob(.+)/)[1] // eslint-disable-line no-magic-numbers
 			counter.files.push("https://raw.githubusercontent.com" + counter.projectPath + rawUrl)
@@ -157,7 +158,7 @@ export class UrlsFromUser {
 				await sleep(isFinishedSyncTime) // eslint-disable-line no-await-in-loop
 			}
 
-			resolve(ListUtils.sliceFromStart(projectsUrls.urls, this.limits.projects));
+			resolve(ListUtils.sliceFromStart(projectsUrls.urls, this.limits.hierarchy.projects));
 		})
 	}
 }
