@@ -53,135 +53,140 @@
 				<a
 					v-on:click="showOptions()"
 					id="options-button"
+					class="btn btn-outline-light"
 				>
 					<i class="fas fa-cog"></i>
 				</a>
 			</div>
 		</div>
-		<div v-show="optionsVisibility" class="row align-items-center padding" id="search-options">
-			<div class="col offset-lg-3 col-lg-2 col-sm-4 col-12">
-				<div
-					class="input-group mb-3"
-					data-toggle="tooltip"
-					data-placement="bottom"
-					title="Maximum projects"
-				>
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-folder"></i>
-						</span>
-					</div>
-					<input
-						id="projectsLimit"
-						v-model="projectsLimit"
-						type="number"
-						class="form-control"
-						min="1"
-						step="1"
-						value="10"
-						placeholder="Maximum projects, e.g. 10"
+		<transition name="fade">
+			<div v-show="optionsVisibility" class="row align-items-center padding" id="search-options">
+				<div class="col offset-lg-3 col-lg-2 col-sm-4 col-12">
+					<div
+						class="input-group mb-3"
+						data-toggle="tooltip"
+						data-placement="bottom"
+						title="Maximum projects"
 					>
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-folder"></i>
+							</span>
+						</div>
+						<input
+							id="projectsLimit"
+							v-model="projectsLimit"
+							type="number"
+							class="form-control"
+							min="1"
+							step="1"
+							value="10"
+							placeholder="Maximum projects, e.g. 10"
+						>
+					</div>
+				</div>
+				<div class="col col-lg-2 col-sm-4 col-12">
+					<div
+						class="input-group mb-3"
+						data-toggle="tooltip"
+						data-placement="bottom"
+						title="Maximum depth in projects"
+					>
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-indent"></i>
+							</span>
+						</div>
+						<input
+							id="depthLimit"
+							v-model="depthLimit"
+							type="number"
+							class="form-control"
+							min="1"
+							step="1"
+							value="2"
+							placeholder="Maximum of depth, e.g. 2"
+						>
+					</div>
+				</div>
+				<div class="col col-lg-2 col-sm-4 col-12">
+					<div
+						class="input-group mb-3"
+						data-toggle="tooltip"
+						data-placement="bottom"
+						title="Maximum files searched"
+					>
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-file"></i>
+							</span>
+						</div>
+						<input
+							id="filesLimit"
+							v-model="filesLimit"
+							type="number"
+							class="form-control"
+							min="1"
+							step="1"
+							value="100"
+							placeholder="Maximum files, e.g. 100"
+						>
+					</div>
 				</div>
 			</div>
-			<div class="col col-lg-2 col-sm-4 col-12">
-				<div
-					class="input-group mb-3"
-					data-toggle="tooltip"
-					data-placement="bottom"
-					title="Maximum depth in projects"
-				>
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-indent"></i>
-						</span>
-					</div>
-					<input
-						id="depthLimit"
-						v-model="depthLimit"
-						type="number"
-						class="form-control"
-						min="1"
-						step="1"
-						value="2"
-						placeholder="Maximum of depth, e.g. 2"
+		</transition>
+		<transition name="fade">
+			<div v-show="optionsVisibility" class="row align-items-center padding">
+				<div class="col offset-lg-3 col-lg-6 col-smx-12">
+					<div
+						class="input-group mb-3"
+						data-toggle="tooltip"
+						data-placement="bottom"
+						title="Languages used"
 					>
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-language"></i>
+							</span>
+						</div>
+						<input
+							id="fileExtensions"
+							v-on:keydown="alphaComma"
+							v-model="fileExtensions"
+							type="input"
+							class="form-control"
+							placeholder="cpp,java,cs,php,js"
+						>
+					</div>
 				</div>
 			</div>
-			<div class="col col-lg-2 col-sm-4 col-12">
-				<div
-					class="input-group mb-3"
-					data-toggle="tooltip"
-					data-placement="bottom"
-					title="Maximum files searched"
-				>
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-file"></i>
-						</span>
-					</div>
-					<input
-						id="filesLimit"
-						v-model="filesLimit"
-						type="number"
-						class="form-control"
-						min="1"
-						step="1"
-						value="100"
-						placeholder="Maximum files, e.g. 100"
+		</transition>
+		<transition name="fade">
+			<div v-show="optionsVisibility" class="row align-items-center padding">
+				<div class="col offset-lg-3 col-lg-6 col-smx-12">
+					<div
+						class="input-group mb-3"
+						data-toggle="tooltip"
+						data-placement="bottom"
+						title="Folders to ignore"
 					>
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-folder-minus"></i>
+							</span>
+						</div>
+						<input
+							id="ignoreFolders"
+							v-on:keydown="alphaComma"
+							v-model="ignoreFolders"
+							type="input"
+							class="form-control"
+							placeholder="build,dist,node_modules,temp"
+						>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div v-show="optionsVisibility" class="row align-items-center padding">
-			<div class="col offset-lg-3 col-lg-6 col-smx-12">
-				<div
-					class="input-group mb-3"
-					data-toggle="tooltip"
-					data-placement="bottom"
-					title="Languages used"
-				>
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-language"></i>
-						</span>
-					</div>
-					<input
-						v-validate="{ required: true, regex: /^([0-9]+)$/ }"
-						id="fileExtensions"
-						v-on:keydown="alphaComma"
-						v-model="fileExtensions"
-						type="input"
-						class="form-control"
-						placeholder="cpp,java,cs,php,js"
-					>
-				</div>
-			</div>
-		</div>
-		<div v-show="optionsVisibility" class="row align-items-center padding">
-			<div class="col offset-lg-3 col-lg-6 col-smx-12">
-				<div
-					class="input-group mb-3"
-					data-toggle="tooltip"
-					data-placement="bottom"
-					title="Folders to ignore"
-				>
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-folder-minus"></i>
-						</span>
-					</div>
-					<input
-						v-validate="{ required: true, regex: /^([0-9]+)$/ }"
-						id="ignoreFolders"
-						v-on:keydown="alphaComma"
-						v-model="ignoreFolders"
-						type="input"
-						class="form-control"
-						placeholder="build,dist,node_modules,temp"
-					>
-				</div>
-			</div>
-		</div>
+		</transition>
 		<div class="padding">
 			<div class="keyboard_container" v-show="finishedLoaded">
 				<div class="keyboard" id="keyboard">
