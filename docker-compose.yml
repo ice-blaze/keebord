@@ -23,7 +23,7 @@ services:
       - /bin/sh
       - -c
       - |
-        npm install
+        npm install 
         reload -b -p 80
   watch:
     image: node:10.10.0
@@ -32,7 +32,13 @@ services:
       - .:/code
     environment:
       - PATH=/code/node_modules/.bin:$PATH
-    command: "npm i && webpack --config webpack.development.js -w --mode development"
+      - NODE_ENV=development
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        npm i 
+        webpack --config webpack.development.js -w --mode development
 
   lint:
     image: node:10.10.0

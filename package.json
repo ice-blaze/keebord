@@ -4,7 +4,7 @@
   "description": "Show the most effective keyboard layout with your GitHub projects",
   "main": "main.js",
   "scripts": {
-    "start": "npm i && webpack --config webpack.development.js --mode development && node app.js",
+    "start": "npm i --only=dev && webpack --config webpack.development.js --mode development && node app.js",
     "test": "webpack --config webpack.test.js --mode development && mocha build_test/bundle.js",
     "lint": "node_modules/.bin/eslint ./javascript ./test"
   },
@@ -45,7 +45,7 @@
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
     "tern": "^0.21.0",
-    "webpack": "^4.16.2",
+    "webpack": "4.19.1",
     "webpack-cli": "^2.1.5"
   }
 }
