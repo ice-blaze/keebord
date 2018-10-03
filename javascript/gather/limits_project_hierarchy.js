@@ -1,4 +1,4 @@
-export default class Limits {
+export default class LimitsProjectHierarchy {
 	constructor(projectsLimit, depthLimit, filesLimit) {
 		this.projects = projectsLimit
 		this.depth = depthLimit
