@@ -1,4 +1,4 @@
-import * as ListUtils from "./list_utils.js"
+import * as ListUtils from "../list_utils.js"
 import $ from "jquery";
 
 export const US_CHARS = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
@@ -15,13 +15,10 @@ const keepUSChars = (text) => {
 	return joinedCleanedChars
 }
 
-// ...
 const cleanText = (text) => {
 	const noFollowingLetters = removeSameLettersFollowing(text)
 	const noTabsText = keepUSChars(noFollowingLetters)
-	// TODO cleanText
-	// removeClosingBrackets // WARNING don't forget to add them on the final layout at least once
-	//
+
 	return noTabsText
 }
 

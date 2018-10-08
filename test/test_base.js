@@ -1,5 +1,5 @@
 import assert from "assert"
-import {removeSameLettersFollowing} from "../javascript/text_frequency.js"
+import {removeSameLettersFollowing} from "../javascript/frequency/text_frequency.js"
 
 describe("Array", function() {
 	describe("#indexOf()", function() {

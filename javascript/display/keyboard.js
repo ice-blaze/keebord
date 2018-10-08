@@ -8,8 +8,8 @@ const addShiftActivation = () => {
 }
 
 const appendLine = (line) => {
-	const KEY = 0
-	const VAL = 1
+	const VAL = 0
+	const KEY = 1
 	let result = ""
 	for (const tuple of line) {
 		// select last keyboard-row
