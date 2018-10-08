@@ -2,7 +2,7 @@
     padding: 0.5em;
 }
 
-$gradiant-color: linear-gradient(to left, #12c2e9, #c471ed, #f64f59);
+$gradiant-color: linear-gradient(90deg, #12c2e9, #c471ed, #f64f59);
 $gradiant-color-nored: linear-gradient(to left, #12c2e9, #c471ed);
 
 /* #github-user { */
@@ -36,7 +36,8 @@ hr {
 
 body, nav {
 	  color: white;
-		background: linear-gradient(129deg, #0034d7, #d5b73b, #d5573b);
+		/* background: linear-gradient(129deg, #0034d7, #d5b73b, #d5573b); */
+		background: $gradiant-color;
 		background-size: 600% 600%;
 
 		-webkit-animation: AnimationName 15s ease infinite;
