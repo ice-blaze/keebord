@@ -112,5 +112,6 @@ export const drawKeyboard = (keyboardLayout) => {
 }
 
 export const drawLoading = () => {
-	$("#find_files").append("Loading...")
+	// $("#find_files").append("Loading...")
+	$("#find_files").append("<div class='lds-dual-ring'></div>")
 }

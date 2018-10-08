@@ -22,10 +22,11 @@ export default class FindingFilesUIUpdate {
 	updateUI() {
 		this.incFileCounter()
 		this.cleanUI()
+		// <div class="progress">
+		// <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+		// </div>
 		this.UINode.append(`
-		<div class="progress">
-			<div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
-		</div>
+		<div class='lds-dual-ring'></div> <br>
 		Currently files found: ${this.currentFilesCount} <br>
 		Currently valide files found: ${this.currentValidFiles}
 		`)

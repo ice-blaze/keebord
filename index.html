@@ -190,7 +190,12 @@
 				<div class="keyboard" id="keyboard">
 				</div>
 			</div>
-			<div id="find_files" class="col col-12 text-center padding" v-show="!finishedLoaded">
+			<!-- <div id="find_files" class="col col-12 text-center padding" v-if="filesFound.findingFilesUI"> -->
+			<div id="find_files" class="col col-12 text-center padding" v-if="!finishedLoaded">
+
+				<!-- <div class='lds-dual-ring'></div> <br> -->
+				<!-- Currently files found: {{filesFound.findingFilesUI.currentFilesCount}} <br> -->
+				<!-- Currently valide files found: {{filesFound.findingFilesUI.currentValidFiles}} -->
 			</div>
 			<div id="loading" class="col col-12 text-center padding" v-show="!finishedLoaded">
 			</div>
