@@ -6,8 +6,8 @@ import "jquery-ui-bundle"
 import * as GitHubGatherAPI from "./gather/github_gather_api.js"
 import * as GitHubGatherScrapping from "./gather/github_gather_webscraping.js"
 import * as KeyboardDisplay from "./display/keyboard.js"
-import * as KeyboardLayoutCreator from "./keyboard_layout_creator.js"
-import * as TextFrequency from "./text_frequency.js"
+import * as KeyboardLayoutCreator from "./frequency/keyboard_layout_creator.js"
+import * as TextFrequency from "./frequency/text_frequency.js"
 
 import $ from "jquery"
 import Chartkick from "chartkick"
@@ -29,11 +29,13 @@ new Vue({
 		gitHubUsername: "",
 		fileExtensions: "php,cpp,js,rb,java,py,cs",
 		ignoreFolders: "build,dist,node_modules,temp",
+		layoutOptions: "caseTogether",
 
 		// form helper variables
 		doesGitHubUserExist: "",
 		frequenciesDictionary: [],
-		projectsUsed: [],
+		rawFrequenciesDictionary: [],
+		filesFound: {},
 		finishedLoaded: false,
 		userIsValid: false,
 		userIsInvalid: false,
@@ -73,6 +75,7 @@ new Vue({
 			}
 		},
 		async searchGithubUserProjects() {
+			this.finishedLoaded = false
 			KeyboardDisplay.drawLoading()
 			// this.frequenciesDictionary = "Loading..."
 			const {limitsHierarchy, limitsLanguagesAndFolders} = this.getLimits()
@@ -84,13 +87,15 @@ new Vue({
 			)
 
 			const urlsGenerator = await urlsFromUser.retrieveUrls()
-			this.projectsUsed = urlsFromUser.projects
+			this.filesFound = urlsFromUser
 
-			const frequencyDict = await TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
-
-			const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(frequencyDict)
-			this.frequenciesDictionary = KeyboardLayoutCreator.getSortedFrequencyPairs(frequencyDict)
+			this.rawFrequenciesDictionary = await TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
+			this.createLayout()
 			this.finishedLoaded = true
+		},
+		createLayout() {
+			const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(this.rawFrequenciesDictionary, this.layoutOptions)
+			this.frequenciesDictionary = KeyboardLayoutCreator.getSortedFrequencyPairs(this.rawFrequenciesDictionary)
 			KeyboardDisplay.drawKeyboard(keyboardLayout)
 		},
 		alphaComma(event) {
@@ -120,5 +125,5 @@ new Vue({
 
 // debug
 // const dict = TextFrequency.getFrequencyDictionaryFromText(TextFrequency.US_CHARS)
-// const qwertyLayout = KeyboardLayoutCreator.getKeyboardLayout(dict)
+// const qwertyLayout = KeyboardLayoutCreator.getKeyboardLayout(dict, "qwertyAndNumeric")
 // KeyboardDisplay.drawKeyboard(qwertyLayout)
