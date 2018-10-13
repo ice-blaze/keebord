@@ -31,18 +31,6 @@ const getProjectsFromDom = (dom) => {
 	}
 }
 
-const getProjectsUrl = async (url, projectsUrls) => {
-	const firstDom = await fetchText(url)
-
-	const res = getProjectsFromDom(firstDom)
-	projectsUrls.urls = projectsUrls.urls.concat(res.urls)
-	if (res.next) {
-		getProjectsUrl(res.next, projectsUrls)
-	} else {
-		projectsUrls.isFinished = true
-	}
-}
-
 const isFinishedSyncTime = 300
 
 // export default class UrlsFromUser {
@@ -152,7 +140,7 @@ export class UrlsFromUser {
 		}
 
 		return new Promise(async (resolve) => {
-			getProjectsUrl(url, projectsUrls)
+			this.getProjectsUrl(url, projectsUrls)
 
 			while (!projectsUrls.isFinished) {
 				await sleep(isFinishedSyncTime) // eslint-disable-line no-await-in-loop
@@ -161,4 +149,19 @@ export class UrlsFromUser {
 			resolve(ListUtils.sliceFromStart(projectsUrls.urls, this.limits.hierarchy.projects));
 		})
 	}
+
+	async getProjectsUrl(url, projectsUrls) {
+		const firstDom = await fetchText(url)
+
+		this.findingFilesUI.projectsUpdateUI()
+
+		const res = getProjectsFromDom(firstDom)
+		projectsUrls.urls = projectsUrls.urls.concat(res.urls)
+		if (res.next) {
+			this.getProjectsUrl(res.next, projectsUrls)
+		} else {
+			projectsUrls.isFinished = true
+		}
+	}
+
 }
