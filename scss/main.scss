@@ -64,5 +64,27 @@ body, nav {
 				0%{background-position:0% 55%}
 				50%{background-position:100% 46%}
 				100%{background-position:0% 55%}
+		}
 }
+
+#collapseFrequencyChart {
+		height: 300px;
+		overflow: scroll;
+		border-radius: 0.3em;
+}
+
+#frequenciesChart {
+		background: #fff;
+		border-radius: 0.3em;
+}
+
+.progress {
+		/* height: 1px; */
+		background: rgba(0,0,0,0);
+}
+
+.progress-bar {
+		background-color: white !important;
+		/* color: black !important; */
+		/* background: black !important; */
 }

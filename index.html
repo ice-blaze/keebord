@@ -126,6 +126,7 @@
 						<input
 							id="fileExtensions"
 							v-on:keydown="alphaComma"
+							@change="removeComma"
 							v-model="fileExtensions"
 							type="input"
 							class="form-control"
@@ -152,6 +153,7 @@
 						<input
 							id="ignoreFolders"
 							v-on:keydown="alphaComma"
+							@change="removeComma"
 							v-model="ignoreFolders"
 							type="input"
 							class="form-control"
@@ -176,30 +178,13 @@
 							@change="userExist"
 							placeholder="GitHub username, e.g. ice-blaze"
 							v-bind:class="{ valid: userIsValid, invalid: userIsInvalid }"
-							class="form-control"
+							class="form-control form-control-lg"
 						>
 					</div>
 					<div class="no-user" v-bind:class="{hide: !userIsInvalid}">
 						User doesn't exist
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="padding">
-			<div class="keyboard_container" v-show="finishedLoaded">
-				<div class="keyboard" id="keyboard">
-				</div>
-			</div>
-			<!-- <div id="find_files" class="col col-12 text-center padding" v-if="filesFound.findingFilesUI"> -->
-			<div id="find_files" class="col col-12 text-center padding" v-if="!finishedLoaded">
-
-				<!-- <div class='lds-dual-ring'></div> <br> -->
-				<!-- Currently files found: {{filesFound.findingFilesUI.currentFilesCount}} <br> -->
-				<!-- Currently valide files found: {{filesFound.findingFilesUI.currentValidFiles}} -->
-			</div>
-			<div id="loading" class="col col-12 text-center padding" v-show="!finishedLoaded">
-			</div>
-			<div id="credits-error" class="col col-12 text-center padding" v-show="!finishedLoaded">
 			</div>
 		</div>
 		<div v-show="finishedLoaded">
@@ -244,10 +229,23 @@
 				</div>
 			</div>
 		</div>
+		<div class="padding">
+			<div class="keyboard_container" v-show="finishedLoaded">
+				<div class="keyboard" id="keyboard">
+				</div>
+			</div>
+			<!-- <div id="find_files" class="col col-12 text-center padding" v-if="filesFound.findingFilesUI"> -->
+			<div id="find_files" class="col col-12 text-center padding" v-show="!finishedLoaded">
+			</div>
+			<div id="loading" class="col col-12 text-center padding" v-show="!finishedLoaded">
+			</div>
+			<div id="credits-error" class="col col-12 text-center padding" v-show="!finishedLoaded">
+			</div>
+		</div>
 		<div class="row" v-show="finishedLoaded">
 			<div class="col col-sm-12 text-center">
 				<button
-					class="btn btn-primary"
+					class="btn btn-light"
 					id="btnFrequencyChartCollapser"
 					type="button"
 					data-toggle="collapse"
@@ -260,18 +258,14 @@
 			</div>
 			<div class="col offset-lg-3 col-lg-6 offset-md-2 col-md-8 col-smx-12 padding">
 				<div class="collapse" id="collapseFrequencyChart">
-					<bar-chart
-						:data="frequenciesDictionary"
-						height="1000px"
-						class=" card card-body"
-					></bar-chart>
+					<canvas id="frequenciesChart" width="400" height="1500"></canvas>
 				</div>
 			</div>
 		</div>
 		<div class="row" v-if="finishedLoaded">
 			<div class="col col-sm-12 text-center padding">
 				<button
-					class="btn btn-primary"
+					class="btn btn-light"
 					id="btnProjectsUsed"
 					type="button"
 					data-toggle="collapse"

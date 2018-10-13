@@ -1,4 +1,4 @@
-import * as ListUtils from "../list_utils.js"
+import * as ListUtils from "../utils/list_utils.js"
 import Cheerio from "cheerio"
 import FindingFilesUIUpdate from "./ui_updates/finding_files_loading.js"
 import {getFileFromUrl} from "./github_gather_api.js"

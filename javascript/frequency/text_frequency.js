@@ -1,4 +1,4 @@
-import * as ListUtils from "../list_utils.js"
+import * as ListUtils from "../utils/list_utils.js"
 import $ from "jquery";
 
 export const US_CHARS = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
@@ -54,10 +54,11 @@ const loading = {
 	updateUI() {
 		this.current += 1
 		this.cleanUI()
-		$("#loading").append(`<div class="progress">
+		$("#loading").append(`
+		<div class="progress">
 			<div class="progress-bar" role="progressbar" style="width: ${this.percentage()}%"></div>
 		</div>
-		Finished / Total: ${this.current} / ${this.maximum}
+		Finished : ${this.current} / ${this.maximum}
 		`)
 	},
 }

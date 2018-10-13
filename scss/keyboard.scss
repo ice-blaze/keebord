@@ -4,9 +4,9 @@
   /* margin: 60px auto; */
   /* box-shadow: inset 1px 1px 0px #f1f1f1, 3px 3px 6px 3px #303038; */
   /* background-color: #e3e3e3; */
-  background: #12c2e9; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #12c2e9, #c471ed, #f64f59); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to left, #12c2e9, #c471ed, #f64f59); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #fff; /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to left, #12c2e9, #c471ed, #f64f59); /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to left, #12c2e9, #c471ed, #f64f59); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   border-radius: 0.4em 0.4em 0.4em 0.4em;
 }
 
@@ -22,8 +22,8 @@
   height: 40px;
   margin: 4px;
   letter-spacing: 0.5px;
-  color: #3a3a3a;
-  background-color: #f7f7f7;
+  color: #424242;
+  background-color: #eaeaea;
   flex: 1;
   border-radius: 3px;
   font-size: 14px;
