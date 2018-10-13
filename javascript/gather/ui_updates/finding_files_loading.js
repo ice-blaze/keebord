@@ -6,6 +6,7 @@ export default class FindingFilesUIUpdate {
 		this.mainNode.empty()
 		this.currentFilesCount = 0
 		this.currentValidFiles = 0
+		this.currentProjectPages = 0
 		this.mainNode.append(`
 		<div class='lds-dual-ring'></div> <br>
 		<div id="current-state-finding-files"></div
@@ -21,8 +22,20 @@ export default class FindingFilesUIUpdate {
 		this.currentValidFiles += 1
 	}
 
+	incProjectPagesCounter() {
+		this.currentProjectPages += 1
+	}
+
 	cleanUI() {
 		this.textNode.empty()
+	}
+
+	projectsUpdateUI() {
+		this.incProjectPagesCounter()
+		this.cleanUI()
+		this.textNode.append(`
+    Retrieving ${this.currentProjectPages} projects pages.
+		`)
 	}
 
 	updateUI() {
