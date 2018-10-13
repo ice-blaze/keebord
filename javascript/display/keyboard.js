@@ -8,13 +8,20 @@ const addShiftActivation = () => {
 }
 
 const appendLine = (line) => {
-	const VAL = 0
-	const KEY = 1
+	const UNSHIFT = 0
+	const SHIFT = 1
 	let result = ""
 	for (const tuple of line) {
 		// select last keyboard-row
 		// TODO add tests with fake keyboard
-		result += `<div class="key"><span>${tuple[KEY]}<br/>${tuple[VAL]}</span></div>`
+		/* eslint-disable no-magic-numbers */
+		result += `
+		<div class="key letter-${tuple[UNSHIFT].charCodeAt(0)}
+			letter-${tuple[SHIFT].charCodeAt(0)}">
+			<span>${tuple[UNSHIFT]}<br/>
+			${tuple[SHIFT]}</span></div>
+		`
+		/* eslint-enable no-magic-numbers */
 	}
 	return result
 }
@@ -113,5 +120,5 @@ export const drawKeyboard = (keyboardLayout) => {
 
 export const drawLoading = () => {
 	// $("#find_files").append("Loading...")
-	$("#find_files").append("<div class='lds-dual-ring'></div>")
+	// $("#find_files").append("<div class='lds-dual-ring'></div>")
 }

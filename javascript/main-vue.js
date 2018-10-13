@@ -1,4 +1,3 @@
-import "chart.js"
 import "jquery-ui-bundle"
 // import "jquery-ui-bundle/jquery-ui.css"
 
@@ -9,14 +8,11 @@ import * as KeyboardDisplay from "./display/keyboard.js"
 import * as KeyboardLayoutCreator from "./frequency/keyboard_layout_creator.js"
 import * as TextFrequency from "./frequency/text_frequency.js"
 
-import $ from "jquery"
-import Chartkick from "chartkick"
+import {alphaComma, removeComma} from "./utils/filter_inputs.js"
 import LimitsProjectHierarchy from "./gather/limits_project_hierarchy.js"
 import ValidLanguagesAndFolders from "./gather/valid_languages_and_folders.js"
 import Vue from "../node_modules/vue/dist/vue.js"
-import VueChartkick from "vue-chartkick"
-
-Vue.use(VueChartkick, {Chartkick})
+import {updateFrequenciesChart} from "./frequency/frequencies_chart.js"
 
 
 new Vue({
@@ -77,7 +73,6 @@ new Vue({
 		async searchGithubUserProjects() {
 			this.finishedLoaded = false
 			KeyboardDisplay.drawLoading()
-			// this.frequenciesDictionary = "Loading..."
 			const {limitsHierarchy, limitsLanguagesAndFolders} = this.getLimits()
 			// const urlsGenerator2 = await GitHubGatherAPI.getUrlsFromUser(gitHubUsername)
 			const urlsFromUser = new GitHubGatherScrapping.UrlsFromUser(
@@ -92,6 +87,7 @@ new Vue({
 			this.rawFrequenciesDictionary = await TextFrequency.getFrequenciesDictonaryFromFiles(urlsGenerator)
 			this.createLayout()
 			this.finishedLoaded = true
+			updateFrequenciesChart(this.frequenciesDictionary)
 		},
 		createLayout() {
 			const keyboardLayout = KeyboardLayoutCreator.getKeyboardLayout(this.rawFrequenciesDictionary, this.layoutOptions)
@@ -99,14 +95,10 @@ new Vue({
 			KeyboardDisplay.drawKeyboard(keyboardLayout)
 		},
 		alphaComma(event) {
-			const alphaCommaRegex = /^[a-zA-Z]*(,[a-zA-Z]+)*$/
-			if (!event.key.match(alphaCommaRegex)) {
-				console.log("remove last input")
-				console.log(event)
-
-				console.log($(event.target).effect("shake"))
-				event.preventDefault()
-			}
+			alphaComma(event)
+		},
+		removeComma() {
+			removeComma(this)
 		},
 	},
 })

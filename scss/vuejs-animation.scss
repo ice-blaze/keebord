@@ -29,3 +29,24 @@
 				transform: rotate(360deg);
 		}
 }
+
+$flash-transition-time: 1.0s;
+$flash-color: #0df;
+
+.flash {
+		-webkit-animation-name: flash-animation;
+		-webkit-animation-duration: $flash-transition-time;
+
+		animation-name: flash-animation;
+		animation-duration: $flash-transition-time;
+}
+
+@-webkit-keyframes flash-animation {
+		from { background: $flash-color; }
+		to   { background: default; }
+}
+
+@keyframes flash-animation {
+		from { background: $flash-color; }
+		to   { background: default; }
+}

@@ -1,5 +1,5 @@
 import * as DisplayErrors from "../display/errors.js"
-import * as ListUtils from "../list_utils.js"
+import * as ListUtils from "../utils/list_utils.js"
 
 const auth = {
 	method: "get",

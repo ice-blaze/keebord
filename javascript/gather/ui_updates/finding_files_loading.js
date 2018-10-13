@@ -2,9 +2,15 @@ import $ from "jquery";
 
 export default class FindingFilesUIUpdate {
 	constructor() {
+		this.mainNode = $("#find_files")
+		this.mainNode.empty()
 		this.currentFilesCount = 0
 		this.currentValidFiles = 0
-		this.UINode = $("#find_files")
+		this.mainNode.append(`
+		<div class='lds-dual-ring'></div> <br>
+		<div id="current-state-finding-files"></div
+		`)
+		this.textNode = $("#current-state-finding-files")
 	}
 
 	incFileCounter() {
@@ -16,27 +22,23 @@ export default class FindingFilesUIUpdate {
 	}
 
 	cleanUI() {
-		this.UINode.empty()
+		this.textNode.empty()
 	}
 
 	updateUI() {
 		this.incFileCounter()
 		this.cleanUI()
-		// <div class="progress">
-		// <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
-		// </div>
-		this.UINode.append(`
-		<div class='lds-dual-ring'></div> <br>
+		this.textNode.append(`
 		Currently files found: ${this.currentFilesCount} <br>
-		Currently valide files found: ${this.currentValidFiles}
+		Currently valid files found: ${this.currentValidFiles}
 		`)
 	}
 
 	finish() {
-		this.cleanUI()
-		this.UINode.append(`
+		this.mainNode.empty()
+		this.mainNode.append(`
 		Files found in total: ${this.currentFilesCount} <br>
-		Valide files found in total: ${this.currentValidFiles} <br>
+		Valid files found in total: ${this.currentValidFiles} <br>
 		`)
 	}
 }
