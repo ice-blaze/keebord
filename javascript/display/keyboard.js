@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from "jquery"
 
 const addShiftActivation = () => {
 	$("#keyboard .left-shift, #keyboard .right-shift").click(() => {
