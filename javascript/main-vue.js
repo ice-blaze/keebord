@@ -1,6 +1,3 @@
-import "jquery-ui-bundle"
-// import "jquery-ui-bundle/jquery-ui.css"
-
 // import * as DisplayErrors from "./display/errors.js"
 import * as GitHubGatherAPI from "./gather/github_gather_api.js"
 import * as GitHubGatherScrapping from "./gather/github_gather_webscraping.js"
@@ -13,7 +10,6 @@ import LimitsProjectHierarchy from "./gather/limits_project_hierarchy.js"
 import ValidLanguagesAndFolders from "./gather/valid_languages_and_folders.js"
 import Vue from "../node_modules/vue/dist/vue.js"
 import {updateFrequenciesChart} from "./frequency/frequencies_chart.js"
-
 
 new Vue({
 	el: "#app",
