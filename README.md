@@ -2,7 +2,7 @@
 
 Demo website https://keebord.herokuapp.com/
 
-How to run the website
+### How to run the website locally
 ```
 docker-compose up web
 ```
