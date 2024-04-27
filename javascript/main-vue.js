@@ -19,7 +19,7 @@ new Vue({
 		depthLimit: 2,
 		projectsLimit: 15,
 		gitHubUsername: "",
-		fileExtensions: "php,cpp,js,rb,java,py,cs",
+		fileExtensions: "php,cpp,js,ts,rb,java,py,cs",
 		ignoreFolders: "build,dist,node_modules,temp",
 		layoutOptions: "caseTogether",
 

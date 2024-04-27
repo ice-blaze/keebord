@@ -6,7 +6,9 @@ import {getFileFromUrl} from "./github_gather_api.js"
 const GITHUB_BASE = "https://github.com/"
 
 const fetchText = async (url) => {
-	const response = await fetch(`https://keebord.herokuapp.com/prox/?url=${encodeURIComponent(url)}`);
+	// const response = await fetch(`https://keebord.herokuapp.com/prox/?url=${encodeURIComponent(url)}`);
+	// const response = await fetch(`http://localhost:3000/prox/?url=${encodeURIComponent(url)}`);
+	const response = await fetch(`${document.URL}prox/?url=${encodeURIComponent(url)}`);
 	return response.text()
 }
 
@@ -93,7 +95,7 @@ export class UrlsFromUser {
 		const cheerDom = Cheerio.load(await fetchText(url))
 
 		// get all links
-		cheerDom("a[id].js-navigation-open")
+		cheerDom("div.react-directory-truncate>a")
 			.each((idx, val) => {
 				const regexFolder = /\/.*\/.*\/tree/
 				const regexFile = /\/.*\/.*\/blob/
@@ -133,6 +135,7 @@ export class UrlsFromUser {
 	}
 
 	projectsFromUser() {
+		// TODO doesn't handle multiple pages
 		const url = GITHUB_BASE + this.username + "?tab=repositories"
 		const projectsUrls = {
 			urls: [],
