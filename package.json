@@ -6,6 +6,8 @@
   "engines": {"node": "20.12.x"},
   "scripts": {
     "start": "npm i && webpack --config webpack.development.js --mode development && node app.js",
+    "build": "webpack --config webpack.development.js --mode development",
+    "serve": "node app.js",
     "watch": "webpack --config webpack.development.js -w --mode development",
     "test": "webpack --config webpack.test.js --mode development && mocha build_test/bundle.js",
     "lint": "node_modules/.bin/eslint ./javascript ./test"
