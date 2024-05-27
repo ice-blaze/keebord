@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/ice-blaze/keebord.svg?style=svg)](https://circleci.com/gh/ice-blaze/keebord)
 
-Demo website https://keebord.onrender.com (can take time, around 50 seconds, if the server was inactive)
+Demo website https://keebord.onrender.com (can take around 50 seconds for the server to start, if there was too much inactivity)
 
 ### How to run the website locally
 ```
